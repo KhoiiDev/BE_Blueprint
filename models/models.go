@@ -30,7 +30,8 @@ func Setup() {
 	})
 
 	db.AutoMigrate(
-		&Hoatieu{}, &Carousel{}, &Introduction{}, &Product{}, &News{}, &ManeuveringDraft{}, &ProductPrice{},
+		&Hoatieu{}, &Carousel{}, &Introduction{}, &Product{}, &News{}, &ManeuveringDraft{}, &ProductPrice{}, &Ship{},
+		&TideCalendar{}, &Stream{},
 	)
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
