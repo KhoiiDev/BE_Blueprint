@@ -1,29 +1,28 @@
 package v1
 
 import (
-	hoatieu_service "be-hoatieu/services/hoatieu"
+	ship_service "be-hoatieu/services/ship"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type Hoatieu struct {
-	Code   string `gorm:"column:code;" json:"code"`
-	Status bool   `gorm:"column:status;" json:"status"`
-	Rank   string `gorm:"column:rank" json:"rank"`
-	Image  string `gorm:"column:image" json:"image"`
-	Name   string `gorm:"column:name" json:"name"`
+type Ship struct {
+	Title   string `gorm:"column:title" json:"title"`
+	Url     string `gorm:"column:url" json:"url"`
+	Image   string `gorm:"column:image" json:"image"`
+	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-func GetAllNavigator_Component(c *fiber.Ctx) error {
-	item := hoatieu_service.Hoatieu{}
+func GetShip_Component(c *fiber.Ctx) error {
+	item := ship_service.Ship{}
 	limit := c.Query("limit")
 	page := c.Query("page")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
-
-	data, totalRecords, err := item.GetAllNavigator_Service(limitStr, PageStr)
+	data, totalRecords, err := item.GetShip_Service(limitStr, PageStr)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

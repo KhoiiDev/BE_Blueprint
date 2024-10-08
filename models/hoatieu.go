@@ -6,24 +6,20 @@ import (
 
 type Hoatieu struct {
 	gorm.Model
-	Code        string `gorm:"column:code;" json:"code"`
-	Status      bool   `gorm:"column:status;" json:"status"`
-	NavigatorId uint   `gorm:"column:userid" json:"userid"`
-	Rank        string `gorm:"column:rank" json:"rank"`
-	Image       string `gorm:"column:image" json:"image"`
-	Lastname    string `gorm:"column:lastname" json:"lastname"`
-	Firstname   string `gorm:"column:firstname" json:"firstname"`
+	Code   string `gorm:"column:code;" json:"code"`
+	Status bool   `gorm:"column:status;" json:"status"`
+	Rank   string `gorm:"column:rank" json:"rank"`
+	Image  string `gorm:"column:image" json:"image"`
+	Name   string `gorm:"column:name" json:"name"`
 }
 
 type ObjectHoaTieu struct {
-	ID          uint   `gorm:"column:ID" json:"ID"`
-	Code        string `gorm:"column:code;" json:"code"`
-	Status      bool   `gorm:"column:status;" json:"status"`
-	NavigatorId uint   `gorm:"column:userid" json:"userid"`
-	Rank        string `gorm:"column:rank" json:"rank"`
-	Image       string `gorm:"column:image" json:"image"`
-	Lastname    string `gorm:"column:lastname" json:"lastname"`
-	Firstname   string `gorm:"column:firstname" json:"firstname"`
+	ID     uint   `gorm:"column:ID" json:"ID"`
+	Code   string `gorm:"column:code;" json:"code"`
+	Status bool   `gorm:"column:status;" json:"status"`
+	Rank   string `gorm:"column:rank" json:"rank"`
+	Image  string `gorm:"column:image" json:"image"`
+	Name   string `gorm:"column:name" json:"name"`
 }
 
 func GetAllNavigator_Model(limit int, page int) (*[]ObjectHoaTieu, int64, error) {
@@ -43,8 +39,8 @@ func GetAllNavigator_Model(limit int, page int) (*[]ObjectHoaTieu, int64, error)
 	err = db.Table("hoatieus").
 		Where("status = ?", 1).
 		Order("created_at DESC").
-		Offset(offset).
 		Limit(limit).
+		Offset(offset).
 		Find(&results).Error
 
 	if err != nil {

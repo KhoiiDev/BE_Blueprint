@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductPrice struct {
+type Ship struct {
 	gorm.Model
 	Title   string `gorm:"column:title" json:"title"`
 	Url     string `gorm:"column:url" json:"url"`
@@ -13,7 +13,7 @@ type ProductPrice struct {
 	Content string `gorm:"column:content" json:"content"`
 }
 
-type ObjectProductPrice struct {
+type ObjectShip struct {
 	ID      uint   `gorm:"column:ID" json:"ID"`
 	Title   string `gorm:"column:title" json:"title"`
 	Url     string `gorm:"column:url" json:"url"`
@@ -22,25 +22,25 @@ type ObjectProductPrice struct {
 	Content string `gorm:"column:content" json:"content"`
 }
 
-func GetProductPrice_Model(limit int, PageStr int) (*[]ObjectProductPrice, int64, error) {
-	var results []ObjectProductPrice
+func GetShip_Model(limit int, page int) (*[]ObjectShip, int64, error) {
+	var results []ObjectShip
 	var totalRecords int64
 
 	// Tính offset dựa trên limit và page
-	offset := (PageStr - 1) * limit
+	offset := (page - 1) * limit
 
-	//  Truy vấn để đếm tổng số bản ghi có status = 1
-	err := db.Table("product_prices").Where("status = ?", 1).Count(&totalRecords).Error
+	// Truy vấn để đếm tổng số bản ghi có status = 1
+	err := db.Table("ships").Where("status = ?", 1).Count(&totalRecords).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-	err = db.Table("product_prices").
+	// Truy vấn dữ liệu dựa trên limit, offset và điều kiện status = 1
+	err = db.Table("ships").
 		Where("status = ?", 1).
 		Order("created_at DESC").
-		Limit(limit).
 		Offset(offset).
+		Limit(limit).
 		Find(&results).Error
 
 	if err != nil {

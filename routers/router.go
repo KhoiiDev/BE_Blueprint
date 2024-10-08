@@ -59,6 +59,17 @@ func InitRouter(r *fiber.App) {
 	productPrice := apiv1.Group("/product-price")
 	productPrice.Get("/", v1.GetProductPrice_Component)
 
+	// Ship list
+	ship := apiv1.Group("/ship")
+	ship.Get("/", v1.GetShip_Component)
+
+	//Tide Calendar
+	tideCalendar := apiv1.Group("/tide-calendar")
+	tideCalendar.Get("/", v1.GetTideCalendar_Component)
+
+	//Stream
+	stream := apiv1.Group("/stream")
+	stream.Get("/", v1.GetStream_Component)
 }
 
 // 	// User
