@@ -34,10 +34,6 @@ func InitRouter(r *fiber.App) {
 		Browse:    true,
 	})
 
-	// JWT check
-	// apiv1.Use(jwtCustom.Protected())
-	// apiv1.Use(jwtCustom.Authorization())
-	// Route
 	apiv1.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👌!")
 	})
@@ -48,8 +44,18 @@ func InitRouter(r *fiber.App) {
 
 	// Home page
 	home := apiv1.Group("/home")
-	home.Get("/carousel", v1.GetCarousel_Component)
+
+	// introduction
 	home.Get("/introduction", v1.GetIntroduction_Component)
+	home.Post("/introduction", v1.CreateIntroduction_Component)
+	home.Put("/introduction/:id", v1.UpdateIntroduction_Component)
+	home.Delete("/introduction/:id", v1.DeleteIntroduction_Component)
+
+	// Home Carousel
+	home.Get("/carousel", v1.GetCarousel_Component)
+	home.Post("/carousel", v1.CreateCarousel_Component)
+	home.Put("/carousel/:id", v1.UpdateCarousel_Component)
+	home.Delete("/carousel/:id", v1.DeleteCarousel_Component)
 
 	// Product Service
 	home.Get("/dichvu", v1.GetServiceList_Component)
@@ -70,10 +76,6 @@ func InitRouter(r *fiber.App) {
 	hoatieu.Put("/:id", v1.UpdateNavigator_Component)
 	hoatieu.Delete("/:id", v1.DeleteNavigator_Component)
 
-	// Category Maneuvering Draft
-	maneuveringDraft := apiv1.Group("/maneuvering-draft")
-	maneuveringDraft.Get("/", v1.GetManeuveringDraft_Component)
-
 	// Category product Price
 	dichvu := apiv1.Group("/product-price")
 	dichvu.Get("/", v1.GetDichvu_Component)
@@ -91,8 +93,14 @@ func InitRouter(r *fiber.App) {
 	//Tide Calendar
 	tideCalendar := apiv1.Group("/tide-calendar")
 	tideCalendar.Get("/", v1.GetTideCalendar_Component)
+	tideCalendar.Post("/", v1.CreateTideCalendar_Component)
+	tideCalendar.Put("/:id", v1.UpdateTideCalendar_Component)
+	tideCalendar.Delete("/:id", v1.DeleteTideCalendar_Component)
 
-	//Stream
-	stream := apiv1.Group("/stream")
-	stream.Get("/", v1.GetStream_Component)
+	// Category Maneuvering Draft
+	maneuveringDraft := apiv1.Group("/maneuvering-draft")
+	maneuveringDraft.Get("/", v1.GetManeuveringDraft_Component)
+	maneuveringDraft.Post("/", v1.CreateManeuveringDraft_Component)
+	maneuveringDraft.Put("/:id", v1.UpdateManeuveringDraft_Component)
+	maneuveringDraft.Delete("/:id", v1.DeleteManeuveringDraft_Component)
 }
