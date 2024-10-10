@@ -6,40 +6,39 @@ import (
 	"gorm.io/gorm"
 )
 
-type Dichvu struct {
+type Servicelist struct {
 	gorm.Model
 	Title   string `gorm:"column:title" json:"title"`
 	Image   string `gorm:"column:image" json:"image"`
-	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
 	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-type ObjectDichvu struct {
+type ObjectServicelist struct {
 	ID      uint   `gorm:"column:id" json:"id"`
 	Title   string `gorm:"column:title" json:"title"`
 	Image   string `gorm:"column:image" json:"image"`
-	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
 	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int64, error) {
-	var results []ObjectDichvu
+func GetServiceList_Model(limit int, page int, showHidden bool) (*[]ObjectServicelist, int64, error) {
+	var results []ObjectServicelist
 	totalRecords := int64(0)
 	var err error
 
 	// Tính offset dựa trên limit và page
 	offset := (page - 1) * limit
 
-	// Truy vấn để đếm tổng số bản ghi
-	err = db.Table("dichvus").Where("deleted_at IS NULL").Count(&totalRecords).Error
-	if err != nil {
-		return nil, 0, err
-	}
-
 	if showHidden {
+		// Truy vấn để đếm tổng số bản ghi
+		err = db.Table("servicelists").Where("deleted_at IS NULL").Count(&totalRecords).Error
+		if err != nil {
+			return nil, 0, err
+		}
 
 		// Truy vấn dữ liệu không có điều kiện status
-		err = db.Table("dichvus").
+		err = db.Table("servicelists").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
 			Limit(limit).
@@ -47,11 +46,10 @@ func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int
 			Find(&results).Error
 	} else {
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-		err = db.Table("dichvus").
+		err = db.Table("servicelists").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
 			Limit(limit).
-			Offset(offset).
 			Find(&results).Error
 	}
 
@@ -63,13 +61,13 @@ func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int
 }
 
 // Corrected CreateNews_Model function
-func CreateDichvu_Model(data map[string]interface{}) error {
+func CreateServiceList_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
-	item := Dichvu{
+	item := Servicelist{
 		Title:   data["title"].(string),
 		Image:   data["image"].(string),
 		Status:  data["status"].(bool),
-		Pdfdata: data["pdfdata"].(string),
+		Content: data["content"].(string),
 	}
 
 	// Insert into the database
@@ -81,19 +79,19 @@ func CreateDichvu_Model(data map[string]interface{}) error {
 	return nil
 }
 
-func UpdateDichvu_Model(id string, data map[string]interface{}) error {
-	item := Dichvu{
+func UpdateServiceList_Model(id string, data map[string]interface{}) error {
+	item := Servicelist{
 		Title:   data["title"].(string),
 		Image:   data["image"].(string),
 		Status:  data["status"].(bool),
-		Pdfdata: data["pdfdata"].(string),
+		Content: data["content"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
 		"image":      item.Image,
 		"status":     item.Status,
-		"pdfdata":    item.Pdfdata,
+		"content":    item.Content,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		return err
@@ -101,16 +99,16 @@ func UpdateDichvu_Model(id string, data map[string]interface{}) error {
 	return nil
 }
 
-func DeleteDichvu_Model(id string) error {
+func DeleteServiceList_Model(id string) error {
 	// Tìm kiếm bản ghi dựa trên ID
-	var dichvu Dichvu
+	var dichvu Servicelist
 	if err := db.Select("deleted_at").Where("id = ?", id).First(&dichvu).Error; err != nil {
 		// Nếu không tìm thấy bản ghi, trả về lỗi
 		return err
 	}
 
 	// Tiến hành xóa bản ghi
-	if err := db.Delete(&Dichvu{}, id).Error; err != nil {
+	if err := db.Delete(&Servicelist{}, id).Error; err != nil {
 		return err
 	}
 

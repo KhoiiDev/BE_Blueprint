@@ -30,7 +30,7 @@ func Setup() {
 	})
 
 	db.AutoMigrate(
-		&Hoatieu{}, &Carousel{}, &Introduction{}, &Dichvu{}, &News{}, &ManeuveringDraft{}, &ProductPrice{}, &Ship{},
+		&Hoatieu{}, &Carousel{}, &Introduction{}, &Dichvu{}, &News{}, &ManeuveringDraft{}, &Servicelist{}, &Ship{},
 		&TideCalendar{}, &Stream{},
 	)
 	if err != nil {

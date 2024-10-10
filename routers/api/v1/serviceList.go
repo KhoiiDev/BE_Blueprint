@@ -1,22 +1,22 @@
 package v1
 
 import (
-	hoatieu_service "be-hoatieu/services/HoaTieu"
+	serviceList_service "be-hoatieu/services/serviceList"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type Hoatieu struct {
-	Code   string `gorm:"column:code;" json:"code"`
-	Status bool   `gorm:"column:status;" json:"status"`
-	Rank   string `gorm:"column:rank" json:"rank"`
-	Image  string `gorm:"column:image" json:"image"`
-	Name   string `gorm:"column:name" json:"name"`
+type ServiceList struct {
+	Title   string `gorm:"column:title" json:"title"`
+	Image   string `gorm:"column:image" json:"image"`
+	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-func GetAllNavigator_Component(c *fiber.Ctx) error {
-	item := hoatieu_service.Hoatieu{}
+func GetServiceList_Component(c *fiber.Ctx) error {
+	item := serviceList_service.Servicelist{}
+
 	limit := c.Query("limit")
 	page := c.Query("page")
 	showHiddenItem := c.Query("showHiddenItem")
@@ -25,7 +25,7 @@ func GetAllNavigator_Component(c *fiber.Ctx) error {
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetAllNavigator_Service(limitStr, PageStr, showHidden)
+	data, totalRecords, err := item.GetServiceList_Service(limitStr, PageStr, showHidden)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -42,8 +42,8 @@ func GetAllNavigator_Component(c *fiber.Ctx) error {
 
 }
 
-func CreateNavigator_Component(c *fiber.Ctx) error {
-	form := &Hoatieu{}
+func CreateServiceList_Component(c *fiber.Ctx) error {
+	form := &ServiceList{}
 
 	// Check, if received JSON data is valid.
 	if err := c.BodyParser(form); err != nil {
@@ -54,13 +54,13 @@ func CreateNavigator_Component(c *fiber.Ctx) error {
 		})
 	}
 
-	HoaTieuService := hoatieu_service.Hoatieu{
-		Name:   form.Name,
-		Image:  form.Image,
-		Status: form.Status,
-		Rank:   form.Rank,
+	ListService := serviceList_service.Servicelist{
+		Title:   form.Title,
+		Image:   form.Image,
+		Status:  form.Status,
+		Content: form.Content,
 	}
-	if err := HoaTieuService.CreateNavigator_Service(); err != nil {
+	if err := ListService.CreateServiceList_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"error": true,
 			"msg":   "Thêm mới không thành công",
@@ -68,9 +68,9 @@ func CreateNavigator_Component(c *fiber.Ctx) error {
 	}
 
 	data := make(map[string]string)
-	data["Name"] = form.Name
+	data["Title"] = form.Title
 	data["Image"] = form.Image
-	data["Rank"] = form.Rank
+	data["Content"] = form.Content
 	data["Status"] = strconv.FormatBool(form.Status)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -79,22 +79,22 @@ func CreateNavigator_Component(c *fiber.Ctx) error {
 	})
 }
 
-func UpdateNavigator_Component(c *fiber.Ctx) error {
-	form := &Hoatieu{}
+func UpdateServiceList_Component(c *fiber.Ctx) error {
+	form := &ServiceList{}
 	if err := c.BodyParser(form); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	HoaTieuService := hoatieu_service.Hoatieu{
-		Name:   form.Name,
-		Image:  form.Image,
-		Status: form.Status,
-		Rank:   form.Rank,
+	ListService := serviceList_service.Servicelist{
+		Title:   form.Title,
+		Image:   form.Image,
+		Status:  form.Status,
+		Content: form.Content,
 	}
 
-	err := HoaTieuService.UpdateNavigator_Service(c.Params("id"))
+	err := ListService.UpdateServiceList_Service(c.Params("id"))
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -103,13 +103,13 @@ func UpdateNavigator_Component(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(HoaTieuService)
+	return c.Status(fiber.StatusOK).JSON(ListService)
 }
 
-func DeleteNavigator_Component(c *fiber.Ctx) error {
-	item := hoatieu_service.Hoatieu{}
+func DeleteServiceList_Component(c *fiber.Ctx) error {
+	item := serviceList_service.Servicelist{}
 
-	data, err := item.DeleteNavigator_Service(c.Params("id"))
+	data, err := item.DeleteServiceList_Service(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":   true,
