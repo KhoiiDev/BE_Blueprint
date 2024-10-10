@@ -1,24 +1,21 @@
 package v1
 
 import (
-	news_service "be-hoatieu/services/news"
+	dichvu_service "be-hoatieu/services/dichvu"
 	"strconv"
-
-	// "time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type News struct {
-	Title    string `gorm:"column:title" json:"title"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	PostDate string `gorm:"column:postdate" json:"postdate"`
+type Dichvu struct {
+	Title   string `gorm:"column:title" json:"title"`
+	Image   string `gorm:"column:image" json:"image"`
+	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
+	Status  bool   `gorm:"column:status" json:"status"`
 }
 
-func GetNews_Component(c *fiber.Ctx) error {
-	item := news_service.News{}
+func GetDichvu_Component(c *fiber.Ctx) error {
+	item := dichvu_service.Dichvu{}
 
 	limit := c.Query("limit")
 	page := c.Query("page")
@@ -28,7 +25,7 @@ func GetNews_Component(c *fiber.Ctx) error {
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetNews_Service(limitStr, PageStr, showHidden)
+	data, totalRecords, err := item.GetDichvu_Service(limitStr, PageStr, showHidden)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -42,10 +39,11 @@ func GetNews_Component(c *fiber.Ctx) error {
 		"data":         data,
 		"totalRecords": totalRecords,
 	})
+
 }
 
-func CreateNews_Component(c *fiber.Ctx) error {
-	form := &News{}
+func CreateDichvu_Component(c *fiber.Ctx) error {
+	form := &Dichvu{}
 
 	// Check, if received JSON data is valid.
 	if err := c.BodyParser(form); err != nil {
@@ -56,14 +54,13 @@ func CreateNews_Component(c *fiber.Ctx) error {
 		})
 	}
 
-	NewsService := news_service.News{
-		Title:    form.Title,
-		Image:    form.Image,
-		Status:   form.Status,
-		Content:  form.Content,
-		Postdate: form.PostDate,
+	DichvuService := dichvu_service.Dichvu{
+		Title:   form.Title,
+		Image:   form.Image,
+		Status:  form.Status,
+		Pdfdata: form.Pdfdata,
 	}
-	if err := NewsService.CreateNews_Service(); err != nil {
+	if err := DichvuService.CreateDichvu_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
 			"error": true,
 			"msg":   "Thêm mới không thành công",
@@ -73,8 +70,7 @@ func CreateNews_Component(c *fiber.Ctx) error {
 	data := make(map[string]string)
 	data["Title"] = form.Title
 	data["Image"] = form.Image
-	data["Content"] = form.Content
-	data["PostDate"] = form.PostDate
+	data["Pdfdata"] = form.Pdfdata
 	data["Status"] = strconv.FormatBool(form.Status)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -83,23 +79,22 @@ func CreateNews_Component(c *fiber.Ctx) error {
 	})
 }
 
-func UpdateNews_Component(c *fiber.Ctx) error {
-	form := &News{}
+func UpdateDichvu_Component(c *fiber.Ctx) error {
+	form := &Dichvu{}
 	if err := c.BodyParser(form); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	NewsService := news_service.News{
-		Title:    form.Title,
-		Image:    form.Image,
-		Status:   form.Status,
-		Content:  form.Content,
-		Postdate: form.PostDate,
+	NewsService := dichvu_service.Dichvu{
+		Title:   form.Title,
+		Image:   form.Image,
+		Status:  form.Status,
+		Pdfdata: form.Pdfdata,
 	}
 
-	err := NewsService.UpdateNews_Service(c.Params("id"))
+	err := NewsService.UpdateDichvu_Service(c.Params("id"))
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -111,10 +106,10 @@ func UpdateNews_Component(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(NewsService)
 }
 
-func DeleteNews_Component(c *fiber.Ctx) error {
-	item := news_service.News{}
+func DeleteDichvu_Component(c *fiber.Ctx) error {
+	item := dichvu_service.Dichvu{}
 
-	data, err := item.DeleteNews_Service(c.Params("id"))
+	data, err := item.DeleteDichvu_Service(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":   true,

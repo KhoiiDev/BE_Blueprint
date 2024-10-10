@@ -27,5 +27,4 @@ func GetIntroduction_Component(c *fiber.Ctx) error {
 		"success": true,
 		"data":    data,
 	})
-
 }

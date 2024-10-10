@@ -2,6 +2,7 @@ package routers
 
 import (
 	"be-hoatieu/pkg/upload"
+	"be-hoatieu/routers/api"
 	v1 "be-hoatieu/routers/api/v1"
 	"fmt"
 
@@ -26,6 +27,7 @@ func InitRouter(r *fiber.App) {
 	apiv1.Use(logger.New(logger.ConfigDefault))     // Logger
 	apiv1.Use(requestid.New())
 	fmt.Println(upload.GetImageFullPath())
+
 	apiv1.Static("/upload/files", upload.GetImageFullPath(), fiber.Static{
 		Compress:  true,
 		ByteRange: true,
@@ -40,12 +42,26 @@ func InitRouter(r *fiber.App) {
 		return c.SendString("Hello, World 👌!")
 	})
 
+	//Image
+	apiv1.Post("/upload", api.UploadFileSingle)
+	apiv1.Post("/upload/multiple", api.UploadFileMultiple)
+
 	// Home page
 	home := apiv1.Group("/home")
 	home.Get("/carousel", v1.GetCarousel_Component)
 	home.Get("/introduction", v1.GetIntroduction_Component)
-	home.Get("/product", v1.GetServiceProduct_Component)
+
+	// Product Service
+	home.Get("/dichvu", v1.GetDichvu_Component)
+	home.Post("/dichvu", v1.CreateDichvu_Component)
+	home.Put("/dichvu/:id", v1.UpdateDichvu_Component)
+	home.Delete("dichvu/:id", v1.DeleteDichvu_Component)
+
+	//News
 	home.Get("/news", v1.GetNews_Component)
+	home.Post("/news", v1.CreateNews_Component)
+	home.Put("/news/:id", v1.UpdateNews_Component)
+	home.Delete("news/:id", v1.DeleteNews_Component)
 
 	// Category Navigator
 	hoatieu := apiv1.Group("/hoatieu")
