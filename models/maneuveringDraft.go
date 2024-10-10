@@ -31,13 +31,13 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool) (*[]ObjectM
 	if showHidden {
 
 		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("tide_calendars").Where("deleted_at IS NULL").Count(&totalRecords).Error
+		err = db.Table("maneuvering_drafts").Where("deleted_at IS NULL").Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
 
 		// Truy vấn dữ liệu không có điều kiện status
-		err = db.Table("tide_calendars").
+		err = db.Table("maneuvering_drafts").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
 			Limit(limit).
@@ -46,15 +46,16 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool) (*[]ObjectM
 	} else {
 
 		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("tide_calendars").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
+		err = db.Table("maneuvering_drafts").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-		err = db.Table("tide_calendars").
+		err = db.Table("maneuvering_drafts").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
-			Limit(1).
+			Limit(limit).
+			Offset(offset).
 			Find(&results).Error
 	}
 
