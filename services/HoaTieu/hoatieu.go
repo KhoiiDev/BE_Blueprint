@@ -16,7 +16,7 @@ type Hoatieu struct {
 }
 
 type ObjectHoaTieu struct {
-	ID     uint   `gorm:"column:ID" json:"ID"`
+	ID     uint   `gorm:"column:id" json:"id"`
 	Code   string `gorm:"column:code;" json:"code"`
 	Status bool   `gorm:"column:status;" json:"status"`
 	Rank   string `gorm:"column:rank" json:"rank"`
@@ -24,88 +24,43 @@ type ObjectHoaTieu struct {
 	Name   string `gorm:"column:name" json:"name"`
 }
 
-func (a *Hoatieu) GetAllNavigator_Service(limit int, page int) (*[]models.ObjectHoaTieu, int64, error) {
-	item, totalRecords, err := models.GetAllNavigator_Model(limit, page)
+func (a *Hoatieu) GetAllNavigator_Service(limit int, page int, showHidden bool) (*[]models.ObjectHoaTieu, int64, error) {
+	item, totalRecords, err := models.GetAllNavigator_Model(limit, page, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}
 	return item, totalRecords, nil
 }
 
-// func (a *Hoatieu) CreateHoaTieu_Service() error {
-// 	item := map[string]interface{}{
-// 		"code":              a.Code,
-// 		"status":            a.Status,
-// 		"userid":            a.UserId,
-// 		"hangid":            a.HangId,
-// 		"bpctac":            a.BPCTac,
-// 		"ngaysinh":          a.NgaySinh,
-// 		"phone":             a.Phone,
-// 		"phone2":            a.Phone2,
-// 		"sex":               a.Sex,
-// 		"tuoi":              a.Tuoi,
-// 		"chungchihoatieuid": a.ChungChiHoaTieuID,
-// 	}
-// 	if err := models.CreateHoaTieu_Model(item); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (n *Hoatieu) CreateNavigator_Service() error {
+	item := map[string]interface{}{
+		"name":   n.Name,
+		"image":  n.Image,
+		"status": n.Status,
+		"rank":   n.Rank,
+	}
+	if err := models.CreateNavigator_Model(item); err != nil { // Change function name to match your model's function
+		return err
+	}
+	return nil
+}
 
-// func (a *Hoatieu) UpdateHoaTieu_Service(id string) error {
-// 	item := map[string]interface{}{
-// 		"code":              a.Code,
-// 		"status":            a.Status,
-// 		"userid":            a.UserId,
-// 		"hangid":            a.HangId,
-// 		"bpctac":            a.BPCTac,
-// 		"ngaysinh":          a.NgaySinh,
-// 		"phone":             a.Phone,
-// 		"phone2":            a.Phone2,
-// 		"sex":               a.Sex,
-// 		"tuoi":              a.Tuoi,
-// 		"chungchihoatieuid": a.ChungChiHoaTieuID,
-// 	}
-// 	if err := models.UpdateHoaTieu_Model(id, item); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+func (a *Hoatieu) UpdateNavigator_Service(id string) error {
+	item := map[string]interface{}{
+		"name":   a.Name,
+		"image":  a.Image,
+		"status": a.Status,
+		"rank":   a.Rank,
+	}
+	if err := models.UpdateNavigator_Model(id, item); err != nil {
+		return err
+	}
+	return nil
+}
 
-// func (a *Hoatieu) GetAllHoaTieuUserID_Service(userid string) (uint, error) {
-// 	item, err := models.GetAllHoaTieuUserID_Model(userid)
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	return item, nil
-// }
-
-// func (a *Hoatieu) GetByHoaTieuUserID_Service(userid string) (string, error) {
-// 	item, err := models.GetByHoaTieuUserID_Model(userid)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return item, nil
-// }
-// func SearchHoaTieu_Service(name string) ([]models.ObjectHoaTieu, error) {
-// 	return models.SearchHoaTieu_Model(name)
-// }
-// func SearchUpDateHoaTieu_Service(iddonhang, ngay, name string) ([]models.ObjectHoaTieu, error) {
-// 	return models.SearchUpDateHoaTieu_Model(iddonhang, ngay, name)
-// }
-// func SearchHT2UpDateHoaTieu_Service(iddonhang, ngay, name string) ([]models.ObjectHoaTieu, error) {
-// 	return models.SearchHT2UpDateHoaTieu_Model(iddonhang, ngay, name)
-// }
-// func SearchHTBangKeSanLuongUpDateHoaTieu_Service(ngay, name string) ([]models.ObjectHoaTieu, error) {
-// 	return models.SearchHTBangKeSanLuongUpDateHoaTieu_Model(ngay, name)
-// }
-// func SearchHoaTieuRole_Service(name, role string) ([]models.ObjectHoaTieu, error) {
-// 	return models.SearchHoaTieuRole_Model(name, role)
-// }
-// func (a *Hoatieu) GetMultipleHoaTieuTrue_Service(name string) (*[]models.ObjectHoaTieu, error) {
-// 	item, err := models.GetMultipleHoaTieuTrue_Model(name)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return item, nil
-// }
+func (a *Hoatieu) DeleteNavigator_Service(id string) (bool, error) {
+	if err := models.DeleteNavigator_Model(id); err != nil {
+		return false, err
+	}
+	return true, nil
+}

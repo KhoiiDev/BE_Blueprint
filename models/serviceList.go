@@ -6,22 +6,24 @@ import (
 	"gorm.io/gorm"
 )
 
-type Ship struct {
+type Servicelist struct {
 	gorm.Model
-	Name   string `gorm:"column:name" json:"name"`
-	Image  string `gorm:"column:image" json:"image"`
-	Status bool   `gorm:"column:status" json:"status"`
+	Title   string `gorm:"column:title" json:"title"`
+	Image   string `gorm:"column:image" json:"image"`
+	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-type ObjectShip struct {
-	ID     uint   `gorm:"column:id" json:"id"`
-	Name   string `gorm:"column:name" json:"name"`
-	Image  string `gorm:"column:image" json:"image"`
-	Status bool   `gorm:"column:status" json:"status"`
+type ObjectServicelist struct {
+	ID      uint   `gorm:"column:id" json:"id"`
+	Title   string `gorm:"column:title" json:"title"`
+	Image   string `gorm:"column:image" json:"image"`
+	Status  bool   `gorm:"column:status" json:"status"`
+	Content string `gorm:"column:content" json:"content"`
 }
 
-func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, error) {
-	var results []ObjectShip
+func GetServiceList_Model(limit int, page int, showHidden bool) (*[]ObjectServicelist, int64, error) {
+	var results []ObjectServicelist
 	totalRecords := int64(0)
 	var err error
 
@@ -29,33 +31,25 @@ func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, 
 	offset := (page - 1) * limit
 
 	if showHidden {
-
 		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("ships").Where("deleted_at IS NULL").Count(&totalRecords).Error
+		err = db.Table("servicelists").Where("deleted_at IS NULL").Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
 
 		// Truy vấn dữ liệu không có điều kiện status
-		err = db.Table("ships").
+		err = db.Table("servicelists").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
 	} else {
-
-		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("ships").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
-		if err != nil {
-			return nil, 0, err
-		}
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-		err = db.Table("ships").
+		err = db.Table("servicelists").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
 			Limit(limit).
-			Offset(offset).
 			Find(&results).Error
 	}
 
@@ -67,12 +61,13 @@ func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, 
 }
 
 // Corrected CreateNews_Model function
-func CreateShip_Model(data map[string]interface{}) error {
+func CreateServiceList_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
-	item := Ship{
-		Name:   data["name"].(string),
-		Image:  data["image"].(string),
-		Status: data["status"].(bool),
+	item := Servicelist{
+		Title:   data["title"].(string),
+		Image:   data["image"].(string),
+		Status:  data["status"].(bool),
+		Content: data["content"].(string),
 	}
 
 	// Insert into the database
@@ -84,17 +79,19 @@ func CreateShip_Model(data map[string]interface{}) error {
 	return nil
 }
 
-func UpdateShip_Model(id string, data map[string]interface{}) error {
-	item := Ship{
-		Name:   data["name"].(string),
-		Image:  data["image"].(string),
-		Status: data["status"].(bool),
+func UpdateServiceList_Model(id string, data map[string]interface{}) error {
+	item := Servicelist{
+		Title:   data["title"].(string),
+		Image:   data["image"].(string),
+		Status:  data["status"].(bool),
+		Content: data["content"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"name":       item.Name,
+		"title":      item.Title,
 		"image":      item.Image,
 		"status":     item.Status,
+		"content":    item.Content,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		return err
@@ -102,16 +99,16 @@ func UpdateShip_Model(id string, data map[string]interface{}) error {
 	return nil
 }
 
-func DeleteShip_Model(id string) error {
+func DeleteServiceList_Model(id string) error {
 	// Tìm kiếm bản ghi dựa trên ID
-	var dichvu Ship
+	var dichvu Servicelist
 	if err := db.Select("deleted_at").Where("id = ?", id).First(&dichvu).Error; err != nil {
 		// Nếu không tìm thấy bản ghi, trả về lỗi
 		return err
 	}
 
 	// Tiến hành xóa bản ghi
-	if err := db.Delete(&Ship{}, id).Error; err != nil {
+	if err := db.Delete(&Servicelist{}, id).Error; err != nil {
 		return err
 	}
 
