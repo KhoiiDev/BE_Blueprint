@@ -13,7 +13,7 @@ type Introduction struct {
 }
 
 type ObjectIntroduction struct {
-	ID      uint   `gorm:"column:ID" json:"ID"`
+	ID      uint   `gorm:"column:id" json:"id"`
 	Content string `gorm:"column:content" json:"content"`
 	Status  bool   `gorm:"column:status" json:"status"`
 }
