@@ -8,16 +8,14 @@ import (
 
 type Hoatieu struct {
 	gorm.Model
-	Code   string `gorm:"column:code;" json:"code"`
 	Status bool   `gorm:"column:status;" json:"status"`
 	Rank   string `gorm:"column:rank" json:"rank"`
-	Image  string `gorm:"column:image" json:"name"`
+	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
 }
 
 type ObjectHoaTieu struct {
 	ID     uint   `gorm:"column:id" json:"id"`
-	Code   string `gorm:"column:code;" json:"code"`
 	Status bool   `gorm:"column:status;" json:"status"`
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
