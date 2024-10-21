@@ -8,7 +8,6 @@ import (
 )
 
 type Hoatieu struct {
-	Code   string `gorm:"column:code;" json:"code"`
 	Status bool   `gorm:"column:status;" json:"status"`
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`

@@ -18,13 +18,14 @@ func GetManeuveringDraft_Component(c *fiber.Ctx) error {
 
 	limit := c.Query("limit")
 	page := c.Query("page")
+	date := c.Query("date")
 	showHiddenItem := c.Query("showHiddenItem")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetManeuveringDraft_Service(limitStr, PageStr, showHidden)
+	data, totalRecords, err := item.GetManeuveringDraft_Service(limitStr, PageStr, showHidden, date)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
