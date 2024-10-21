@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
@@ -20,7 +21,7 @@ type ObjectManeuveringDraft struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
-func GetManeuveringDraft_Model(limit int, page int, showHidden bool) (*[]ObjectManeuveringDraft, int64, error) {
+func GetManeuveringDraft_Model(limit int, page int, showHidden bool, date string) (*[]ObjectManeuveringDraft, int64, error) {
 	var results []ObjectManeuveringDraft
 	totalRecords := int64(0)
 	var err error
@@ -44,19 +45,29 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool) (*[]ObjectM
 			Offset(offset).
 			Find(&results).Error
 	} else {
+		if date != "" {
+			// Xử lý lỗi ngay khi parse date
+			parsedDate, parseErr := time.Parse("02/01/2006", date)
+			if parseErr != nil {
+				return nil, 0, fmt.Errorf("Định dạng ngày không hợp lệ: %v", parseErr)
+			}
+			formattedDate := parsedDate.Format("2006-01-02")
 
-		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("maneuvering_drafts").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
-		if err != nil {
-			return nil, 0, err
+			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
+			err = db.Table("maneuvering_drafts").
+				Where("status = ? AND deleted_at IS NULL AND postdate = ?", 1, formattedDate).
+				Order("created_at DESC").
+				Limit(1).
+				Find(&results).Error
+		} else {
+			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
+			err = db.Table("maneuvering_drafts").
+				Where("status = ? AND deleted_at IS NULL", 1).
+				Order("created_at DESC").
+				Limit(1).
+				Find(&results).Error
 		}
-		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-		err = db.Table("maneuvering_drafts").
-			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
-			Limit(limit).
-			Offset(offset).
-			Find(&results).Error
+
 	}
 
 	if err != nil {

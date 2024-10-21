@@ -19,12 +19,13 @@ func GetTideCalendar_Component(c *fiber.Ctx) error {
 	limit := c.Query("limit")
 	page := c.Query("page")
 	showHiddenItem := c.Query("showHiddenItem")
+	date := c.Query("date")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetTideCalendar_Service(limitStr, PageStr, showHidden)
+	data, totalRecords, err := item.GetTideCalendar_Service(limitStr, PageStr, showHidden, date)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

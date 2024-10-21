@@ -20,8 +20,8 @@ type ObjectTideCalendar struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
-func (a *TideCalendar) GetTideCalendar_Service(limit int, page int, showHidden bool) (*[]models.ObjectTideCalendar, int64, error) {
-	item, totalRecords, err := models.GetTideCalendar_Model(limit, page, showHidden)
+func (a *TideCalendar) GetTideCalendar_Service(limit int, page int, showHidden bool, date string) (*[]models.ObjectTideCalendar, int64, error) {
+	item, totalRecords, err := models.GetTideCalendar_Model(limit, page, showHidden, date)
 	if err != nil {
 		return nil, 0, err
 	}
