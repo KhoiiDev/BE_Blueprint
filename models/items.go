@@ -30,35 +30,36 @@ type ObjectItems struct {
 
 func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]ObjectItems, int64, error) {
 	var results []ObjectItems
-	totalRecords := int64(0)
+	var totalRecords int64
 	var err error
 
 	// Tính offset dựa trên limit và page
 	offset := (page - 1) * limit
 
-	if showHidden {
-		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("items").Where("deleted_at IS NULL").Count(&totalRecords).Error
-		if err != nil {
-			return nil, 0, err
-		}
+	// Tạo truy vấn cơ bản
+	query := db.Table("items").Where("deleted_at IS NULL")
 
-		// Truy vấn dữ liệu không có điều kiện status
-		err = db.Table("items").
-			Where("itemtype = ? AND deleted_at IS NULL", item_type).
-			Order("created_at DESC").
-			Limit(limit).
-			Offset(offset).
-			Find(&results).Error
-	} else {
-		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
-		err = db.Table("items").
-			Where("itemtype = ? AND deleted_at IS NULL", item_type).
-			Order("created_at DESC").
-			Limit(limit).
-			Offset(offset).
-			Find(&results).Error
+	// Thêm điều kiện cho item_type
+	if item_type != "" {
+		query = query.Where("itemtype = ?", item_type)
 	}
+
+	if !showHidden {
+		// Thêm điều kiện status nếu không hiển thị item ẩn
+		query = query.Where("status = ?", 1)
+	}
+
+	// Tính tổng số bản ghi
+	err = query.Count(&totalRecords).Error
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Lấy dữ liệu với limit và offset
+	err = query.Order("created_at DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&results).Error
 
 	if err != nil {
 		return nil, 0, err
