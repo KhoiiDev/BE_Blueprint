@@ -12,7 +12,7 @@ func UploadFileSingle(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
-			"msg":   err,
+			"msg":   "Lỗi",
 		})
 	}
 
@@ -22,14 +22,10 @@ func UploadFileSingle(c *fiber.Ctx) error {
 			"msg":   "INVALID_PARAMS",
 		})
 	}
-	fileName := upload.GetImageName(file.Filename) // You can rename this function to something more generic
+	fileName := upload.GetImageName(file.Filename)
 	fullPath := upload.GetImageFullPath()
 	savePath := upload.GetImagePath()
 	src := fullPath + fileName
-	// imageName := upload.GetImageName(file.Filename)
-	// fullPath := upload.GetImageFullPath()
-	// savePath := upload.GetImagePath()
-	// src := fullPath + imageName
 
 	// Remove CheckImageExt and CheckImageSize if you need to allow other file types
 	if err := upload.CheckImage(fullPath); err != nil {
@@ -54,58 +50,6 @@ func UploadFileSingle(c *fiber.Ctx) error {
 	})
 }
 
-// func UploadFileSingle(c *fiber.Ctx) error {
-// 	file, err := c.FormFile("file")
-// 	if err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": true,
-// 			"msg":   err,
-// 		})
-// 	}
-
-// 	if file == nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": true,
-// 			"msg":   "INVALID_PARAMS",
-// 		})
-// 	}
-
-// 	fileName := upload.GetImageName(file.Filename) // You can rename this function to something more generic
-// 	fullPath := upload.GetImageFullPath()
-// 	savePath := upload.GetImagePath()
-// 	src := fullPath + fileName
-
-// 	if !upload.CheckFileExt(fileName) || !upload.CheckImageSize(file) {
-// 		fmt.Println(upload.CheckFileExt(fileName))
-// 		fmt.Println(upload.CheckImageSize(file))
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": true,
-// 			"msg":   "ERROR_UPLOAD_CHECK_FILE_FORMAT",
-// 		})
-// 	}
-
-// 	err = upload.CheckImage(fullPath) // Consider renaming this function as well
-// 	if err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": true,
-// 			"msg":   "ERROR_UPLOAD_CHECK_FILE_FAIL",
-// 		})
-// 	}
-
-// 	if err := c.SaveFile(file, src); err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"error": true,
-// 			"msg":   "ERROR_UPLOAD_SAVE_FILE_FAIL",
-// 		})
-// 	}
-
-//		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-//			"error":         false,
-//			"msg":           "SUCCESS",
-//			"file_url":      upload.GetImageFullUrl(fileName),
-//			"file_save_url": savePath + fileName,
-//		})
-//	}
 func UploadFileMultiple(c *fiber.Ctx) error {
 	form, err := c.MultipartForm()
 	if err != nil {

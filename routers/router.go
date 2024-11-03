@@ -16,11 +16,9 @@ import (
 func InitRouter(r *fiber.App) {
 
 	apiv1 := r.Group("/api/v1")
+	// maxUploadSize := int64(10 * 1024 * 1024) // 10MB
 
-	// // dang ky
-	// apiv1.Post("/signup", v1.SignUp)
-	// // dang nhap
-	// apiv1.Post("/signin", v1.SignIn)
+	// r.Use(MaxUploadSize(maxUploadSize))
 
 	apiv1.Use(cors.New(cors.ConfigDefault))         // CORS
 	apiv1.Use(compress.New(compress.ConfigDefault)) // Compress
@@ -103,4 +101,19 @@ func InitRouter(r *fiber.App) {
 	maneuveringDraft.Post("/", v1.CreateManeuveringDraft_Component)
 	maneuveringDraft.Put("/:id", v1.UpdateManeuveringDraft_Component)
 	maneuveringDraft.Delete("/:id", v1.DeleteManeuveringDraft_Component)
+
+	// Category Maneuvering Draft
+	items := apiv1.Group("/items")
+	items.Get("/", v1.GetItems_Component)
+	items.Post("/", v1.CreateItems_Component)
+	items.Put("/:id", v1.UpdateItems_Component)
+	items.Delete("/:id", v1.DeleteItems_Component)
 }
+
+// func MaxUploadSize(maxSize int64) fiber.Handler {
+// 	return func(c *fiber.Ctx) error {
+// 		// Thiết lập giá trị tối đa vào context để sử dụng trong handler
+// 		c.Locals("maxUploadSize", maxSize)
+// 		return c.Next()
+// 	}
+// }

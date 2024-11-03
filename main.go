@@ -27,5 +27,5 @@ func main() {
 
 	routers.InitRouter(r)
 
-	r.Listen(":3965")
+	r.Listen(":3966")
 }
