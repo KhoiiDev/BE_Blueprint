@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Item struct {
+type Items struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
 	Image    string `gorm:"column:image" json:"image"`
@@ -71,7 +71,7 @@ func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]
 // Corrected Createitems_Model function
 func CreateItems_Model(data map[string]interface{}) error {
 	// Create a items object using the provided data
-	item := Item{
+	item := Items{
 		Title:    data["title"].(string),
 		Image:    data["image"].(string),
 		Pdfurl:   data["pdfurl"].(string),
@@ -91,7 +91,7 @@ func CreateItems_Model(data map[string]interface{}) error {
 }
 
 func UpdateItems_Model(id string, data map[string]interface{}) error {
-	item := Item{
+	item := Items{
 		Title:    data["title"].(string),
 		Image:    data["image"].(string),
 		Pdfurl:   data["pdfurl"].(string),
@@ -116,14 +116,14 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 
 func DeleteItems_Model(id string) error {
 	// Tìm kiếm bản ghi dựa trên ID
-	var item Item
+	var item Items
 	if err := db.Select("deleted_at").Where("id = ?", id).First(&item).Error; err != nil {
 		// Nếu không tìm thấy bản ghi, trả về lỗi
 		return err
 	}
 
 	// Tiến hành xóa bản ghi
-	if err := db.Delete(&Item{}, id).Error; err != nil {
+	if err := db.Delete(&Items{}, id).Error; err != nil {
 		return err
 	}
 
