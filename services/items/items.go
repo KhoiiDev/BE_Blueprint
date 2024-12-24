@@ -9,6 +9,7 @@ import (
 type Items struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
@@ -20,6 +21,7 @@ type Items struct {
 type ObjectItems struct {
 	ID       uint   `gorm:"column:ID" json:"ID"`
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
@@ -39,6 +41,8 @@ func (a *Items) GetItems_Service(limit int, page int, showHidden bool, item_type
 func (n *Items) CreateItems_Service() error {
 	item := map[string]interface{}{
 		"title":    n.Title,
+		"subtitle": n.SubTitle,
+
 		"image":    n.Image,
 		"pdfurl":   n.Pdfurl,
 		"status":   n.Status,
@@ -55,6 +59,7 @@ func (n *Items) CreateItems_Service() error {
 func (a *Items) UpdateItems_Service(id string) error {
 	item := map[string]interface{}{
 		"title":    a.Title,
+		"subtitle": a.SubTitle,
 		"image":    a.Image,
 		"pdfurl":   a.Pdfurl,
 		"status":   a.Status,

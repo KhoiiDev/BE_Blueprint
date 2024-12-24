@@ -8,10 +8,12 @@ import (
 )
 
 type Dichvu struct {
-	Title   string `gorm:"column:title" json:"title"`
-	Image   string `gorm:"column:image" json:"image"`
-	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
-	Status  bool   `gorm:"column:status" json:"status"`
+	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Content  string `gorm:"column:content" json:"content"`
+	Image    string `gorm:"column:image" json:"image"`
+	Pdfdata  string `gorm:"column:pdfdata" json:"pdfdata"`
+	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 func GetDichvu_Component(c *fiber.Ctx) error {
@@ -55,7 +57,10 @@ func CreateDichvu_Component(c *fiber.Ctx) error {
 	}
 
 	DichvuService := dichvu_service.Dichvu{
-		Title:   form.Title,
+		Title:    form.Title,
+		SubTitle: form.SubTitle,
+		Content:  form.Content,
+
 		Image:   form.Image,
 		Status:  form.Status,
 		Pdfdata: form.Pdfdata,
@@ -69,6 +74,8 @@ func CreateDichvu_Component(c *fiber.Ctx) error {
 
 	data := make(map[string]string)
 	data["Title"] = form.Title
+	data["SubTitle"] = form.SubTitle
+	data["Content"] = form.Content
 	data["Image"] = form.Image
 	data["Pdfdata"] = form.Pdfdata
 	data["Status"] = strconv.FormatBool(form.Status)
@@ -88,10 +95,12 @@ func UpdateDichvu_Component(c *fiber.Ctx) error {
 		})
 	}
 	NewsService := dichvu_service.Dichvu{
-		Title:   form.Title,
-		Image:   form.Image,
-		Status:  form.Status,
-		Pdfdata: form.Pdfdata,
+		Title:    form.Title,
+		SubTitle: form.SubTitle,
+		Content:  form.Content,
+		Image:    form.Image,
+		Status:   form.Status,
+		Pdfdata:  form.Pdfdata,
 	}
 
 	err := NewsService.UpdateDichvu_Service(c.Params("id"))

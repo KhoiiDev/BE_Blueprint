@@ -9,7 +9,8 @@ import (
 type News struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
-	Image    string `gorm:"column:image" json:"image"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Image string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
 	Postdate string `gorm:"column:postdate" json:"postdate"`
@@ -18,6 +19,7 @@ type News struct {
 type ObjectNews struct {
 	ID       uint   `gorm:"column:id" json:"id"`
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -68,6 +70,7 @@ func CreateNews_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
 	item := News{
 		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
 		Image:    data["image"].(string),
 		Status:   data["status"].(bool),
 		Content:  data["content"].(string),
@@ -86,6 +89,7 @@ func CreateNews_Model(data map[string]interface{}) error {
 func UpdateNews_Model(id string, data map[string]interface{}) error {
 	item := News{
 		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
 		Image:    data["image"].(string),
 		Status:   data["status"].(bool),
 		Content:  data["content"].(string),
@@ -94,6 +98,7 @@ func UpdateNews_Model(id string, data map[string]interface{}) error {
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
+		"subtitle":   item.SubTitle,
 		"image":      item.Image,
 		"status":     item.Status,
 		"postdate":   item.Postdate,
