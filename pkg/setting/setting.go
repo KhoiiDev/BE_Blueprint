@@ -50,7 +50,7 @@ var DatabaseSetting = &Database{}
 func Setup() {
 	AppSetting.JwtSecret = "NozfkxSLpMQACMgKwm#rfcFEfSMytD2B@&FJT!XQ6qdf5#uGN5"
 	AppSetting.PageSize = 10
-	AppSetting.PrefixUrl = "http://127.0.0.1:3965"
+	AppSetting.PrefixUrl = "http://127.0.0.1:3966"
 
 	// AppSetting.RuntimeRootPath = "runtime/"
 
@@ -73,10 +73,9 @@ func Setup() {
 
 	// AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 
-	AppSetting.ImageMaxSize = 10 * 1024 * 1024
+	AppSetting.ImageMaxSize = 50 * 1024 * 1024 // 50MB
 	AppSetting.ImageSavePath = "upload/files/"
-	// AppSetting.ImageSavePath = "upload/images/"
-	AppSetting.FileMaxSize = 10 * 1024 * 1024 // 10MB
+	AppSetting.FileMaxSize = 50 * 1024 * 1024 // 50MB
 	AppSetting.FileAllowExts = []string{".jpg", ".jpeg", ".png", ".pdf", ".txt"}
 
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second

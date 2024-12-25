@@ -120,7 +120,6 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 }
 
 func DeleteItems_Model(id string) error {
-	// Tìm kiếm bản ghi dựa trên ID
 	var item Items
 	if err := db.Select("deleted_at").Where("id = ?", id).First(&item).Error; err != nil {
 		// Nếu không tìm thấy bản ghi, trả về lỗi
