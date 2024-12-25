@@ -9,7 +9,7 @@ import (
 
 type ManeuveringDraft struct {
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Dataurl  string `gorm:"column:dataurl" json:"dataurl"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
@@ -54,7 +54,7 @@ func CreateManeuveringDraft_Component(c *fiber.Ctx) error {
 	}
 
 	ManeuveringDraftService := maneuveringDraft_service.ManeuveringDraft{
-		Dataurl:  form.Dataurl,
+		Pdfurl:  form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}
@@ -66,7 +66,7 @@ func CreateManeuveringDraft_Component(c *fiber.Ctx) error {
 	}
 
 	data := make(map[string]string)
-	data["Dataurl"] = form.Dataurl
+	data["Pdfurl"] = form.Pdfurl
 	data["PostDate"] = form.PostDate
 	data["Status"] = strconv.FormatBool(form.Status)
 
@@ -85,7 +85,7 @@ func UpdateManeuveringDraft_Component(c *fiber.Ctx) error {
 		})
 	}
 	ManeuveringDraftService := maneuveringDraft_service.ManeuveringDraft{
-		Dataurl:  form.Dataurl,
+		Pdfurl:  form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}

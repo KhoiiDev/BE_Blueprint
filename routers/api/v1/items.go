@@ -11,6 +11,7 @@ import (
 
 type Items struct {
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
@@ -61,6 +62,7 @@ func CreateItems_Component(c *fiber.Ctx) error {
 
 	ItemsService := items_service.Items{
 		Title:    form.Title,
+		SubTitle: form.SubTitle,
 		Image:    form.Image,
 		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
@@ -77,6 +79,7 @@ func CreateItems_Component(c *fiber.Ctx) error {
 
 	data := make(map[string]string)
 	data["Title"] = form.Title
+	data["SubTitle"] = form.SubTitle
 	data["Image"] = form.Image
 	data["Pdfurl"] = form.Pdfurl
 	data["Content"] = form.Content
@@ -100,6 +103,7 @@ func UpdateItems_Component(c *fiber.Ctx) error {
 	}
 	ItemsService := items_service.Items{
 		Title:    form.Title,
+		SubTitle: form.SubTitle,
 		Image:    form.Image,
 		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,

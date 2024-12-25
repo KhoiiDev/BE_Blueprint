@@ -9,14 +9,14 @@ import (
 type ManeuveringDraft struct {
 	gorm.Model
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Dataurl  string `gorm:"column:dataurl" json:"dataurl"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectManeuveringDraft struct {
 	ID       uint   `gorm:"column:id" json:"id"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Dataurl  string `gorm:"column:dataurl" json:"dataurl"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
@@ -30,7 +30,7 @@ func (a *ManeuveringDraft) GetManeuveringDraft_Service(limit int, page int, show
 
 func (n *ManeuveringDraft) CreateManeuveringDraft_Service() error {
 	item := map[string]interface{}{
-		"dataurl":  n.Dataurl,
+		"pdfurl":   n.Pdfurl,
 		"postdate": n.PostDate,
 		"status":   n.Status,
 	}
@@ -42,7 +42,7 @@ func (n *ManeuveringDraft) CreateManeuveringDraft_Service() error {
 
 func (a *ManeuveringDraft) UpdateManeuveringDraft_Service(id string) error {
 	item := map[string]interface{}{
-		"dataurl":  a.Dataurl,
+		"pdfurl":   a.Pdfurl,
 		"postdate": a.PostDate,
 		"status":   a.Status,
 	}
