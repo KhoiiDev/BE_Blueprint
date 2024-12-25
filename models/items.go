@@ -9,6 +9,7 @@ import (
 type Items struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -20,6 +21,7 @@ type Items struct {
 type ObjectItems struct {
 	ID       uint   `gorm:"column:id" json:"id"`
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -34,7 +36,7 @@ func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]
 	var err error
 
 	// Tính offset dựa trên limit và page
-	offset := (page - 1) * limit
+	offset := (page - 1) * limit 
 
 	// Tạo truy vấn cơ bản
 	query := db.Table("items").Where("deleted_at IS NULL")
@@ -73,6 +75,7 @@ func CreateItems_Model(data map[string]interface{}) error {
 	// Create a items object using the provided data
 	item := Items{
 		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
 		Image:    data["image"].(string),
 		Pdfurl:   data["pdfurl"].(string),
 		Status:   data["status"].(bool),
@@ -93,6 +96,7 @@ func CreateItems_Model(data map[string]interface{}) error {
 func UpdateItems_Model(id string, data map[string]interface{}) error {
 	item := Items{
 		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
 		Image:    data["image"].(string),
 		Pdfurl:   data["pdfurl"].(string),
 		Status:   data["status"].(bool),
@@ -102,8 +106,9 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
-		"image":      item.Image,
+		"subtitle":   item.SubTitle,
 		"pdfurl":     item.Pdfurl,
+		"image":      item.Image,
 		"status":     item.Status,
 		"postdate":   item.Postdate,
 		"content":    item.Content,

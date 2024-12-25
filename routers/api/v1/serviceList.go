@@ -8,9 +8,14 @@ import (
 )
 
 type ServiceList struct {
-	Title   string `gorm:"column:title" json:"title"`
-	Image   string `gorm:"column:image" json:"image"`
-	Status  bool   `gorm:"column:status" json:"status"`
+	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Image    string `gorm:"column:image" json:"image"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+	Status   bool   `gorm:"column:status" json:"status"`
+
+	Pdfurl string `gorm:"column:pdfurl" json:"pdfurl"`
+
 	Content string `gorm:"column:content" json:"content"`
 }
 
@@ -55,10 +60,13 @@ func CreateServiceList_Component(c *fiber.Ctx) error {
 	}
 
 	ListService := serviceList_service.Servicelist{
-		Title:   form.Title,
-		Image:   form.Image,
-		Status:  form.Status,
-		Content: form.Content,
+		Title:    form.Title,
+		SubTitle: form.SubTitle,
+		Pdfurl:   form.Pdfurl,
+		Postdate: form.Postdate,
+		Image:    form.Image,
+		Status:   form.Status,
+		Content:  form.Content,
 	}
 	if err := ListService.CreateServiceList_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -69,7 +77,10 @@ func CreateServiceList_Component(c *fiber.Ctx) error {
 
 	data := make(map[string]string)
 	data["Title"] = form.Title
+	data["SubTitle"] = form.SubTitle
+	data["Pdfurl"] = form.Pdfurl
 	data["Image"] = form.Image
+	data["Postdate"] = form.Postdate
 	data["Content"] = form.Content
 	data["Status"] = strconv.FormatBool(form.Status)
 
@@ -88,10 +99,13 @@ func UpdateServiceList_Component(c *fiber.Ctx) error {
 		})
 	}
 	ListService := serviceList_service.Servicelist{
-		Title:   form.Title,
-		Image:   form.Image,
-		Status:  form.Status,
-		Content: form.Content,
+		Title:    form.Title,
+		Image:    form.Image,
+		SubTitle: form.SubTitle,
+		Postdate: form.Postdate,
+		Pdfurl:   form.Pdfurl,
+		Status:   form.Status,
+		Content:  form.Content,
 	}
 
 	err := ListService.UpdateServiceList_Service(c.Params("id"))

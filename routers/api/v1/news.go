@@ -11,6 +11,7 @@ import (
 
 type News struct {
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -58,6 +59,7 @@ func CreateNews_Component(c *fiber.Ctx) error {
 
 	NewsService := news_service.News{
 		Title:    form.Title,
+		SubTitle: form.SubTitle,
 		Image:    form.Image,
 		Status:   form.Status,
 		Content:  form.Content,
@@ -72,6 +74,7 @@ func CreateNews_Component(c *fiber.Ctx) error {
 
 	data := make(map[string]string)
 	data["Title"] = form.Title
+	data["SubTitle"] = form.SubTitle
 	data["Image"] = form.Image
 	data["Content"] = form.Content
 	data["PostDate"] = form.PostDate
@@ -93,6 +96,7 @@ func UpdateNews_Component(c *fiber.Ctx) error {
 	}
 	NewsService := news_service.News{
 		Title:    form.Title,
+		SubTitle: form.SubTitle,
 		Image:    form.Image,
 		Status:   form.Status,
 		Content:  form.Content,

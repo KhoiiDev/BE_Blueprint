@@ -9,14 +9,14 @@ import (
 
 type TideCalendar struct {
 	gorm.Model
-	Pdfuri   string `gorm:"column:pdfuri" json:"pdfuri"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectTideCalendar struct {
 	ID       uint   `gorm:"column:id" json:"id"`
-	Pdfuri   string `gorm:"column:pdfuri" json:"pdfuri"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
@@ -81,7 +81,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, date string) (*
 func CreateTideCalendar_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
 	item := TideCalendar{
-		Pdfuri:   data["pdfuri"].(string),
+		Pdfurl:   data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
 		Status:   data["status"].(bool),
 	}
@@ -97,13 +97,13 @@ func CreateTideCalendar_Model(data map[string]interface{}) error {
 
 func UpdateTideCalendar_Model(id string, data map[string]interface{}) error {
 	item := TideCalendar{
-		Pdfuri:   data["pdfuri"].(string),
+		Pdfurl:   data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
 		Status:   data["status"].(bool),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"pdfuri":     item.Pdfuri,
+		"pdfurl":     item.Pdfurl,
 		"postdate":   item.PostDate,
 		"status":     item.Status,
 		"updated_at": time.Now(),

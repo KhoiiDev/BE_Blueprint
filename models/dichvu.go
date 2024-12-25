@@ -8,18 +8,25 @@ import (
 
 type Dichvu struct {
 	gorm.Model
-	Title   string `gorm:"column:title" json:"title"`
-	Image   string `gorm:"column:image" json:"image"`
-	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
-	Status  bool   `gorm:"column:status" json:"status"`
+	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Content  string `gorm:"column:content" json:"content"`
+	Image    string `gorm:"column:image" json:"image"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectDichvu struct {
-	ID      uint   `gorm:"column:id" json:"id"`
-	Title   string `gorm:"column:title" json:"title"`
-	Image   string `gorm:"column:image" json:"image"`
-	Pdfdata string `gorm:"column:pdfdata" json:"pdfdata"`
-	Status  bool   `gorm:"column:status" json:"status"`
+	ID       uint   `gorm:"column:id" json:"id"`
+	Title    string `gorm:"column:title" json:"title"`
+	Image    string `gorm:"column:image" json:"image"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Content  string `gorm:"column:content" json:"content"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int64, error) {
@@ -66,10 +73,13 @@ func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int
 func CreateDichvu_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
 	item := Dichvu{
-		Title:   data["title"].(string),
-		Image:   data["image"].(string),
-		Status:  data["status"].(bool),
-		Pdfdata: data["pdfdata"].(string),
+		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
+		Content:  data["content"].(string),
+		Image:    data["image"].(string),
+		Postdate: data["postdate"].(string),
+		Status:   data["status"].(bool),
+		Pdfurl:   data["pdfurl"].(string),
 	}
 
 	// Insert into the database
@@ -83,17 +93,24 @@ func CreateDichvu_Model(data map[string]interface{}) error {
 
 func UpdateDichvu_Model(id string, data map[string]interface{}) error {
 	item := Dichvu{
-		Title:   data["title"].(string),
-		Image:   data["image"].(string),
-		Status:  data["status"].(bool),
-		Pdfdata: data["pdfdata"].(string),
+		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
+		Content:  data["content"].(string),
+		Image:    data["image"].(string),
+		Postdate: data["postdate"].(string),
+
+		Status: data["status"].(bool),
+		Pdfurl: data["pdfurl"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
+		"subtitle":   item.SubTitle,
+		"content":    item.Content,
+		"postdate":   item.Postdate,
 		"image":      item.Image,
 		"status":     item.Status,
-		"pdfdata":    item.Pdfdata,
+		"pdfurl":     item.Pdfurl,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		return err

@@ -10,14 +10,14 @@ import (
 type ManeuveringDraft struct {
 	gorm.Model
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Dataurl  string `gorm:"column:dataurl" json:"dataurl"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectManeuveringDraft struct {
 	ID       uint   `gorm:"column:id" json:"id"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Dataurl  string `gorm:"column:dataurl" json:"dataurl"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
@@ -81,7 +81,7 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool, date string
 func CreateManeuveringDraft_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
 	item := ManeuveringDraft{
-		Dataurl:  data["dataurl"].(string),
+		Pdfurl:  data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
 		Status:   data["status"].(bool),
 	}
@@ -97,13 +97,13 @@ func CreateManeuveringDraft_Model(data map[string]interface{}) error {
 
 func UpdateManeuveringDraft_Model(id string, data map[string]interface{}) error {
 	item := ManeuveringDraft{
-		Dataurl:  data["dataurl"].(string),
+		Pdfurl:  data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
 		Status:   data["status"].(bool),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"dataurl":    item.Dataurl,
+		"pdfurl":    item.Pdfurl,
 		"postdate":   item.PostDate,
 		"status":     item.Status,
 		"updated_at": time.Now(),

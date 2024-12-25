@@ -9,6 +9,7 @@ import (
 type News struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -18,6 +19,7 @@ type News struct {
 type ObjectNews struct {
 	ID       uint   `gorm:"column:ID" json:"ID"`
 	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
@@ -35,6 +37,7 @@ func (a *News) GetNews_Service(limit int, page int, showHidden bool) (*[]models.
 func (n *News) CreateNews_Service() error {
 	item := map[string]interface{}{
 		"title":    n.Title,
+		"subtitle": n.SubTitle,
 		"image":    n.Image,
 		"status":   n.Status,
 		"content":  n.Content,
@@ -49,6 +52,7 @@ func (n *News) CreateNews_Service() error {
 func (a *News) UpdateNews_Service(id string) error {
 	item := map[string]interface{}{
 		"title":    a.Title,
+		"subtitle": a.SubTitle,
 		"image":    a.Image,
 		"status":   a.Status,
 		"content":  a.Content,
