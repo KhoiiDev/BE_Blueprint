@@ -107,8 +107,8 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
 		"subtitle":   item.SubTitle,
-		"image":      item.Image,
 		"pdfurl":     item.Pdfurl,
+		"image":      item.Image,
 		"status":     item.Status,
 		"postdate":   item.Postdate,
 		"content":    item.Content,

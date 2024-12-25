@@ -8,14 +8,14 @@ import (
 
 type TideCalendar struct {
 	gorm.Model
-	Pdfuri   string `gorm:"column:pdfuri" json:"pdfuri"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectTideCalendar struct {
 	ID       uint   `gorm:"column:id" json:"id"`
-	Pdfuri   string `gorm:"column:pdfuri" json:"pdfuri"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
@@ -30,7 +30,7 @@ func (a *TideCalendar) GetTideCalendar_Service(limit int, page int, showHidden b
 
 func (n *TideCalendar) CreateTideCalendar_Service() error {
 	item := map[string]interface{}{
-		"pdfuri":   n.Pdfuri,
+		"pdfurl":   n.Pdfurl,
 		"postdate": n.PostDate,
 		"status":   n.Status,
 	}
@@ -42,7 +42,7 @@ func (n *TideCalendar) CreateTideCalendar_Service() error {
 
 func (a *TideCalendar) UpdateTideCalendar_Service(id string) error {
 	item := map[string]interface{}{
-		"pdfuri":   a.Pdfuri,
+		"pdfurl":   a.Pdfurl,
 		"postdate": a.PostDate,
 		"status":   a.Status,
 	}

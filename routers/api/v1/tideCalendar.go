@@ -8,7 +8,7 @@ import (
 )
 
 type TideCalendar struct {
-	Pdfuri   string `gorm:"column:pdfuri" json:"pdfuri"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
@@ -54,7 +54,7 @@ func CreateTideCalendar_Component(c *fiber.Ctx) error {
 	}
 
 	TideCalendarService := TideCalendar_service.TideCalendar{
-		Pdfuri:   form.Pdfuri,
+		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}
@@ -66,7 +66,7 @@ func CreateTideCalendar_Component(c *fiber.Ctx) error {
 	}
 
 	data := make(map[string]string)
-	data["Pdfuri"] = form.Pdfuri
+	data["Pdfurl"] = form.Pdfurl
 	data["PostDate"] = form.PostDate
 	data["Status"] = strconv.FormatBool(form.Status)
 
@@ -85,7 +85,7 @@ func UpdateTideCalendar_Component(c *fiber.Ctx) error {
 		})
 	}
 	TideCalendarService := TideCalendar_service.TideCalendar{
-		Pdfuri:   form.Pdfuri,
+		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}

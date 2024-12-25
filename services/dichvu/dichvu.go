@@ -11,9 +11,11 @@ type Dichvu struct {
 	Title    string `gorm:"column:title" json:"title"`
 	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Content  string `gorm:"column:content" json:"content"`
-	Image    string `gorm:"column:image" json:"image"`
-	Pdfdata  string `gorm:"column:pdfdata" json:"pdfdata"`
-	Status   bool   `gorm:"column:status" json:"status"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+
+	Image  string `gorm:"column:image" json:"image"`
+	Pdfurl string `gorm:"column:pdfurl" json:"pdfurl"`
+	Status bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectDichvu struct {
@@ -22,8 +24,10 @@ type ObjectDichvu struct {
 	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Content  string `gorm:"column:content" json:"content"`
 	Image    string `gorm:"column:image" json:"image"`
-	Pdfdata  string `gorm:"column:pdfdata" json:"pdfdata"`
-	Status   bool   `gorm:"column:status" json:"status"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+
+	Status bool `gorm:"column:status" json:"status"`
 }
 
 func (a *Dichvu) GetDichvu_Service(limit int, page int, showHidden bool) (*[]models.ObjectDichvu, int64, error) {
@@ -40,8 +44,10 @@ func (n *Dichvu) CreateDichvu_Service() error {
 		"subtitle": n.SubTitle,
 		"content":  n.Content,
 		"image":    n.Image,
-		"status":   n.Status,
-		"pdfdata":  n.Pdfdata,
+		"postdate": n.Postdate,
+
+		"status": n.Status,
+		"pdfurl": n.Pdfurl,
 	}
 	if err := models.CreateDichvu_Model(item); err != nil { // Change function name to match your model's function
 		return err
@@ -55,8 +61,9 @@ func (a *Dichvu) UpdateDichvu_Service(id string) error {
 		"subtitle": a.SubTitle,
 		"content":  a.Content,
 		"image":    a.Image,
+		"postdate": a.Postdate,
 		"status":   a.Status,
-		"pdfdata":  a.Pdfdata,
+		"pdfurl":   a.Pdfurl,
 	}
 	if err := models.UpdateDichvu_Model(id, item); err != nil {
 		return err

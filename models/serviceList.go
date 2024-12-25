@@ -8,15 +8,23 @@ import (
 
 type Servicelist struct {
 	gorm.Model
-	Title   string `gorm:"column:title" json:"title"`
+	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+
 	Image   string `gorm:"column:image" json:"image"`
 	Status  bool   `gorm:"column:status" json:"status"`
 	Content string `gorm:"column:content" json:"content"`
 }
 
 type ObjectServicelist struct {
-	ID      uint   `gorm:"column:id" json:"id"`
-	Title   string `gorm:"column:title" json:"title"`
+	ID       uint   `gorm:"column:id" json:"id"`
+	Title    string `gorm:"column:title" json:"title"`
+	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
+
 	Image   string `gorm:"column:image" json:"image"`
 	Status  bool   `gorm:"column:status" json:"status"`
 	Content string `gorm:"column:content" json:"content"`
@@ -64,10 +72,13 @@ func GetServiceList_Model(limit int, page int, showHidden bool) (*[]ObjectServic
 func CreateServiceList_Model(data map[string]interface{}) error {
 	// Create a News object using the provided data
 	item := Servicelist{
-		Title:   data["title"].(string),
-		Image:   data["image"].(string),
-		Status:  data["status"].(bool),
-		Content: data["content"].(string),
+		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
+		Postdate: data["postdate"].(string),
+		Image:    data["image"].(string),
+		Pdfurl:   data["pdfurl"].(string),
+		Status:   data["status"].(bool),
+		Content:  data["content"].(string),
 	}
 
 	// Insert into the database
@@ -81,15 +92,21 @@ func CreateServiceList_Model(data map[string]interface{}) error {
 
 func UpdateServiceList_Model(id string, data map[string]interface{}) error {
 	item := Servicelist{
-		Title:   data["title"].(string),
-		Image:   data["image"].(string),
-		Status:  data["status"].(bool),
-		Content: data["content"].(string),
+		Title:    data["title"].(string),
+		SubTitle: data["subtitle"].(string),
+		Postdate: data["postdate"].(string),
+		Image:    data["image"].(string),
+		Pdfurl:   data["pdfurl"].(string),
+		Status:   data["status"].(bool),
+		Content:  data["content"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"title":      item.Title,
 		"image":      item.Image,
+		"subtitle":   item.SubTitle,
+		"pdfurl":     item.Pdfurl,
+		"postdate":   item.Postdate,
 		"status":     item.Status,
 		"content":    item.Content,
 		"updated_at": time.Now(),

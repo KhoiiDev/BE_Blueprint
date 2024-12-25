@@ -12,8 +12,10 @@ type Dichvu struct {
 	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
 	Content  string `gorm:"column:content" json:"content"`
 	Image    string `gorm:"column:image" json:"image"`
-	Pdfdata  string `gorm:"column:pdfdata" json:"pdfdata"`
+	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+
 	Status   bool   `gorm:"column:status" json:"status"`
+	Postdate string `gorm:"column:postdate" json:"postdate"`
 }
 
 func GetDichvu_Component(c *fiber.Ctx) error {
@@ -60,10 +62,10 @@ func CreateDichvu_Component(c *fiber.Ctx) error {
 		Title:    form.Title,
 		SubTitle: form.SubTitle,
 		Content:  form.Content,
-
-		Image:   form.Image,
-		Status:  form.Status,
-		Pdfdata: form.Pdfdata,
+		Postdate: form.Postdate,
+		Image:    form.Image,
+		Status:   form.Status,
+		Pdfurl:   form.Pdfurl,
 	}
 	if err := DichvuService.CreateDichvu_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -76,8 +78,9 @@ func CreateDichvu_Component(c *fiber.Ctx) error {
 	data["Title"] = form.Title
 	data["SubTitle"] = form.SubTitle
 	data["Content"] = form.Content
+	data["Postdate"] = form.Postdate
 	data["Image"] = form.Image
-	data["Pdfdata"] = form.Pdfdata
+	data["Pdfurl"] = form.Pdfurl
 	data["Status"] = strconv.FormatBool(form.Status)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -99,8 +102,9 @@ func UpdateDichvu_Component(c *fiber.Ctx) error {
 		SubTitle: form.SubTitle,
 		Content:  form.Content,
 		Image:    form.Image,
+		Postdate: form.Postdate,
 		Status:   form.Status,
-		Pdfdata:  form.Pdfdata,
+		Pdfurl:   form.Pdfurl,
 	}
 
 	err := NewsService.UpdateDichvu_Service(c.Params("id"))

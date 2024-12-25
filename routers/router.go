@@ -56,10 +56,10 @@ func InitRouter(r *fiber.App) {
 	home.Delete("/carousel/:id", v1.DeleteCarousel_Component)
 
 	// Product Service
-	home.Get("/dichvu", v1.GetServiceList_Component)
-	home.Post("/dichvu", v1.CreateServiceList_Component)
-	home.Put("/dichvu/:id", v1.UpdateServiceList_Component)
-	home.Delete("/dichvu/:id", v1.DeleteServiceList_Component)
+	home.Get("/servicelist", v1.GetServiceList_Component)
+	home.Post("/servicelist", v1.CreateServiceList_Component)
+	home.Put("/servicelist/:id", v1.UpdateServiceList_Component)
+	home.Delete("/servicelist/:id", v1.DeleteServiceList_Component)
 
 	//News
 	home.Get("/news", v1.GetNews_Component)
