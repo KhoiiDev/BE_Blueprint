@@ -66,8 +66,8 @@ func Setup() {
 
 	DatabaseSetting.Type = "sqlserver"
 	DatabaseSetting.User = "sa"
-	DatabaseSetting.Password = "taideptraiko"
-	DatabaseSetting.Host = "LAPTOPACER:1433"
+	DatabaseSetting.Password = "12345"
+	DatabaseSetting.Host = "KHOI:1433"
 	DatabaseSetting.Name = "Blueprint"
 	DatabaseSetting.TablePrefix = ""
 
