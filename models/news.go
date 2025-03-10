@@ -10,7 +10,7 @@ type News struct {
 	gorm.Model
 	Title    string `gorm:"column:title" json:"title"`
 	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image string `gorm:"column:image" json:"image"`
+	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
 	Postdate string `gorm:"column:postdate" json:"postdate"`
@@ -49,6 +49,12 @@ func GetNews_Model(limit int, page int, showHidden bool) (*[]ObjectNews, int64, 
 			Offset(offset).
 			Find(&results).Error
 	} else {
+
+		// Truy vấn để đếm tổng số bản ghi
+		err = db.Table("news").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
+		if err != nil {
+			return nil, 0, err
+		}
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("news").
 			Where("status = ? AND deleted_at IS NULL", 1).
