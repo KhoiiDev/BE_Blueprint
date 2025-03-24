@@ -16,6 +16,8 @@ type Items struct {
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
+	Videourl string `gorm:"column:videourl" json:"videourl"`
+
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
@@ -67,6 +69,7 @@ func CreateItems_Component(c *fiber.Ctx) error {
 		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		Content:  form.Content,
+		Videourl: form.Videourl,
 		Postdate: form.PostDate,
 		ItemType: form.ItemType,
 	}
@@ -83,6 +86,7 @@ func CreateItems_Component(c *fiber.Ctx) error {
 	data["Image"] = form.Image
 	data["Pdfurl"] = form.Pdfurl
 	data["Content"] = form.Content
+	data["Videourl"] = form.Videourl
 	data["PostDate"] = form.PostDate
 	data["ItemType"] = form.ItemType
 	data["Status"] = strconv.FormatBool(form.Status)
@@ -108,6 +112,8 @@ func UpdateItems_Component(c *fiber.Ctx) error {
 		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		Content:  form.Content,
+		Videourl: form.Videourl,
+
 		Postdate: form.PostDate,
 	}
 

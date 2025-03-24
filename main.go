@@ -21,6 +21,7 @@ func main() {
 		WriteTimeout: setting.ServerSetting.WriteTimeout,
 		JSONEncoder:  sonic.Marshal,
 		JSONDecoder:  sonic.Unmarshal,
+		BodyLimit:    setting.ServerSetting.VideoLimit,
 	})
 
 	r.Use(cors.New())

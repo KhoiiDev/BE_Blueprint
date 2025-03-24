@@ -8,37 +8,73 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
+
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 )
 
 func InitRouter(r *fiber.App) {
+	// Global Middleware CORS (áp dụng cho toàn bộ server, bao gồm API routes)
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: "*", // Có thể ghi rõ: "http://localhost:5173"
+		AllowMethods: "GET,POST,PUT,DELETE,OPTIONS",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
 
-	apiv1 := r.Group("/api/v1")
-	// maxUploadSize := int64(10 * 1024 * 1024) // 10MB
+	// Compress, Logger, RequestID cho toàn bộ server
+	r.Use(compress.New(compress.ConfigDefault))
+	r.Use(logger.New(logger.ConfigDefault))
+	r.Use(requestid.New())
 
-	// r.Use(MaxUploadSize(maxUploadSize))
-
-	apiv1.Use(cors.New(cors.ConfigDefault))         // CORS
-	apiv1.Use(compress.New(compress.ConfigDefault)) // Compress
-	apiv1.Use(logger.New(logger.ConfigDefault))     // Logger
-	apiv1.Use(requestid.New())
 	fmt.Println(upload.GetImageFullPath())
+	fmt.Println(upload.GetVideoFullPath()) // Log đường dẫn video nếu cần
 
-	apiv1.Static("/upload/files", upload.GetImageFullPath(), fiber.Static{
+	// Serve static image files
+	imageGroup := r.Group("/api/v1/upload/files/images")
+	imageGroup.Static("/", upload.GetImageFullPath(), fiber.Static{
 		Compress:  true,
 		ByteRange: true,
 		Browse:    true,
+		ModifyResponse: func(c *fiber.Ctx) error {
+			c.Set("Access-Control-Allow-Origin", "*")
+			c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+			c.Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			return nil
+		},
 	})
+
+	// Serve static video files
+	videoGroup := r.Group("/api/v1/upload/files/videos")
+	videoGroup.Static("/", upload.GetVideoFullPath(), fiber.Static{
+		Compress:  true,
+		ByteRange: true,
+		Browse:    true,
+		ModifyResponse: func(c *fiber.Ctx) error {
+			c.Set("Access-Control-Allow-Origin", "*")
+			c.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+			c.Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			return nil
+		},
+	})
+
+	// Các API routes khác
+	apiv1 := r.Group("/api/v1")
+
+	// Nếu cần giới hạn upload size, uncomment dòng này
+	// maxUploadSize := int64(10 * 1024 * 1024) // 10MB
+	// r.Use(MaxUploadSize(maxUploadSize))
 
 	apiv1.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World 👌!")
 	})
 
-	//Image
+	// Upload Image APIs
 	apiv1.Post("/upload", api.UploadFileSingle)
 	apiv1.Post("/upload/multiple", api.UploadFileMultiple)
+
+	// Upload Video API
+	apiv1.Post("/upload-video", v1.UploadVideo)
 
 	// Home page
 	home := apiv1.Group("/home")

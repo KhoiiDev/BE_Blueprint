@@ -11,11 +11,14 @@ type TideCalendar struct {
 	gorm.Model
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
+	Title    string `gorm:"column:title" json:"title"`
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectTideCalendar struct {
-	ID       uint   `gorm:"column:id" json:"id"`
+	ID    uint   `gorm:"column:id" json:"id"`
+	Title string `gorm:"column:title" json:"title"`
+
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
 	Status   bool   `gorm:"column:status" json:"status"`
@@ -83,6 +86,7 @@ func CreateTideCalendar_Model(data map[string]interface{}) error {
 	item := TideCalendar{
 		Pdfurl:   data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
+		Title:    data["title"].(string),
 		Status:   data["status"].(bool),
 	}
 
@@ -99,12 +103,14 @@ func UpdateTideCalendar_Model(id string, data map[string]interface{}) error {
 	item := TideCalendar{
 		Pdfurl:   data["pdfurl"].(string),
 		PostDate: data["postdate"].(string),
+		Title:    data["title"].(string),
 		Status:   data["status"].(bool),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
 		"pdfurl":     item.Pdfurl,
 		"postdate":   item.PostDate,
+		"title":      item.Title,
 		"status":     item.Status,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
