@@ -10,7 +10,9 @@ import (
 type TideCalendar struct {
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	PostDate string `gorm:"column:postdate" json:"postdate"`
-	Status   bool   `gorm:"column:status" json:"status"`
+	Title    string `gorm:"column:title" json:"title"`
+
+	Status bool `gorm:"column:status" json:"status"`
 }
 
 func GetTideCalendar_Component(c *fiber.Ctx) error {
@@ -68,6 +70,7 @@ func CreateTideCalendar_Component(c *fiber.Ctx) error {
 	data := make(map[string]string)
 	data["Pdfurl"] = form.Pdfurl
 	data["PostDate"] = form.PostDate
+	data["Title"] = form.Title
 	data["Status"] = strconv.FormatBool(form.Status)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -87,6 +90,7 @@ func UpdateTideCalendar_Component(c *fiber.Ctx) error {
 	TideCalendarService := TideCalendar_service.TideCalendar{
 		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
+		Title:    form.Title,
 		PostDate: form.PostDate,
 	}
 

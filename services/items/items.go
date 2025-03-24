@@ -14,6 +14,8 @@ type Items struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 	Content  string `gorm:"column:content" json:"content"`
+	Videourl string `gorm:"column:videourl" json:"videourl"`
+
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
@@ -25,6 +27,7 @@ type ObjectItems struct {
 	Image    string `gorm:"column:image" json:"image"`
 	Status   bool   `gorm:"column:status" json:"status"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Videourl string `gorm:"column:videourl" json:"videourl"`
 	Content  string `gorm:"column:content" json:"content"`
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
@@ -46,6 +49,8 @@ func (n *Items) CreateItems_Service() error {
 		"image":    n.Image,
 		"pdfurl":   n.Pdfurl,
 		"status":   n.Status,
+		"videourl": n.Videourl,
+
 		"content":  n.Content,
 		"postdate": n.Postdate,
 		"itemtype": n.ItemType,
@@ -62,6 +67,7 @@ func (a *Items) UpdateItems_Service(id string) error {
 		"subtitle": a.SubTitle,
 		"image":    a.Image,
 		"pdfurl":   a.Pdfurl,
+		"videourl": a.Videourl,
 		"status":   a.Status,
 		"content":  a.Content,
 		"postdate": a.Postdate,

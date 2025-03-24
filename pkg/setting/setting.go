@@ -32,6 +32,8 @@ type Server struct {
 	HttpPort     int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
+	VideoLimit   int // thêm dòng này
+
 }
 
 var ServerSetting = &Server{}
@@ -73,11 +75,16 @@ func Setup() {
 
 	// AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 
+
 	AppSetting.ImageMaxSize = 50 * 1024 * 1024 // 50MB
 	AppSetting.ImageSavePath = "upload/files/"
 	AppSetting.FileMaxSize = 50 * 1024 * 1024 // 50MB
+
 	AppSetting.FileAllowExts = []string{".jpg", ".jpeg", ".png", ".pdf", ".txt"}
 
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.ReadTimeout * time.Second
+
+	ServerSetting.VideoLimit = 500 * 1024 * 1024 // 500MB
+
 }

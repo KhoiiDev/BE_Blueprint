@@ -15,6 +15,7 @@ type Items struct {
 	Content  string `gorm:"column:content" json:"content"`
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Videourl string `gorm:"column:videourl" json:"videourl"`
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
 
@@ -26,6 +27,8 @@ type ObjectItems struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 	Content  string `gorm:"column:content" json:"content"`
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
+	Videourl string `gorm:"column:videourl" json:"videourl"`
+
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
@@ -36,7 +39,7 @@ func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]
 	var err error
 
 	// Tính offset dựa trên limit và page
-	offset := (page - 1) * limit 
+	offset := (page - 1) * limit
 
 	// Tạo truy vấn cơ bản
 	query := db.Table("items").Where("deleted_at IS NULL")
@@ -80,6 +83,7 @@ func CreateItems_Model(data map[string]interface{}) error {
 		Pdfurl:   data["pdfurl"].(string),
 		Status:   data["status"].(bool),
 		Content:  data["content"].(string),
+		Videourl: data["videourl"].(string),
 		Postdate: data["postdate"].(string),
 		ItemType: data["itemtype"].(string),
 	}
@@ -99,6 +103,8 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 		SubTitle: data["subtitle"].(string),
 		Image:    data["image"].(string),
 		Pdfurl:   data["pdfurl"].(string),
+		Videourl: data["videourl"].(string),
+
 		Status:   data["status"].(bool),
 		Content:  data["content"].(string),
 		Postdate: data["postdate"].(string),
@@ -109,6 +115,7 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 		"subtitle":   item.SubTitle,
 		"pdfurl":     item.Pdfurl,
 		"image":      item.Image,
+		"videourl":   item.Videourl,
 		"status":     item.Status,
 		"postdate":   item.Postdate,
 		"content":    item.Content,
