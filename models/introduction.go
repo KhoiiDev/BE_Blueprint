@@ -18,7 +18,7 @@ type ObjectIntroduction struct {
 	Status  bool   `gorm:"column:status" json:"status"`
 }
 
-func GetIntroduction_Model(limit int, page int, showHidden bool) (*[]ObjectIntroduction, int64, error) {
+func GetIntroduction_Model(limit int, page int, name string, showHidden bool) (*[]ObjectIntroduction, int64, error) {
 	var results []ObjectIntroduction
 	totalRecords := int64(0)
 	var err error
@@ -37,6 +37,7 @@ func GetIntroduction_Model(limit int, page int, showHidden bool) (*[]ObjectIntro
 		err = db.Table("introductions").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
+			Where("content LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -45,6 +46,7 @@ func GetIntroduction_Model(limit int, page int, showHidden bool) (*[]ObjectIntro
 		err = db.Table("introductions").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
+			Where("content LIKE ?", "%"+name+"%").
 			Limit(1).
 			Find(&results).Error
 	}

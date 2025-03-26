@@ -20,7 +20,7 @@ type ObjectShip struct {
 	Status bool   `gorm:"column:status" json:"status"`
 }
 
-func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, error) {
+func GetShip_Model(limit int, page int, name string, showHidden bool) (*[]ObjectShip, int64, error) {
 	var results []ObjectShip
 	totalRecords := int64(0)
 	var err error
@@ -39,6 +39,7 @@ func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, 
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("ships").
 			Where("deleted_at IS NULL").
+			Where("name LIKE ?", "%"+name+"%").
 			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
@@ -54,6 +55,7 @@ func GetShip_Model(limit int, page int, showHidden bool) (*[]ObjectShip, int64, 
 		err = db.Table("ships").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
+			Where("name LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error

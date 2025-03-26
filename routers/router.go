@@ -22,6 +22,13 @@ func InitRouter(r *fiber.App) {
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
+	apiv1 := r.Group("/api/v1")
+
+	// dang ky
+	apiv1.Post("/signup", v1.SignUp)
+	// dang nhap
+	apiv1.Post("/signin", v1.SignIn)
+
 	// Compress, Logger, RequestID cho toàn bộ server
 	r.Use(compress.New(compress.ConfigDefault))
 	r.Use(logger.New(logger.ConfigDefault))
@@ -59,7 +66,6 @@ func InitRouter(r *fiber.App) {
 	})
 
 	// Các API routes khác
-	apiv1 := r.Group("/api/v1")
 
 	// Nếu cần giới hạn upload size, uncomment dòng này
 	// maxUploadSize := int64(10 * 1024 * 1024) // 10MB
@@ -78,6 +84,19 @@ func InitRouter(r *fiber.App) {
 
 	// Home page
 	home := apiv1.Group("/home")
+
+	// User
+	userRoute := apiv1.Group("/user")
+	userRoute.Get("/", v1.GetAllUser_Router)
+	userRoute.Get("/:id", v1.GetByIdUser_Router)
+	userRoute.Get("/username/:username", v1.GetByUserName_Router)
+	userRoute.Put("/:id", v1.PutUsers)
+	userRoute.Get("/trangthai/status", v1.GetAllUserTrue_Router)
+	userRoute.Put("/pass/:id", v1.PutPasswordUsers)
+	userRoute.Put("/image/:id", v1.PutIamgeUsers)
+	userRoute.Put("/info/:id", v1.PutDetailUsers)
+	// Xóa người dùng theo ID
+	userRoute.Delete("/:id", v1.DeleteUser) // Thêm route DELETE tại đây
 
 	// introduction
 	home.Get("/introduction", v1.GetIntroduction_Component)
@@ -144,6 +163,7 @@ func InitRouter(r *fiber.App) {
 	items.Post("/", v1.CreateItems_Component)
 	items.Put("/:id", v1.UpdateItems_Component)
 	items.Delete("/:id", v1.DeleteItems_Component)
+
 }
 
 // func MaxUploadSize(maxSize int64) fiber.Handler {

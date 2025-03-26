@@ -19,13 +19,14 @@ func GetManeuveringDraft_Component(c *fiber.Ctx) error {
 	limit := c.Query("limit")
 	page := c.Query("page")
 	date := c.Query("date")
+	name := c.Query("name")
 	showHiddenItem := c.Query("showHiddenItem")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetManeuveringDraft_Service(limitStr, PageStr, showHidden, date)
+	data, totalRecords, err := item.GetManeuveringDraft_Service(limitStr, PageStr, showHidden, name, date)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -54,7 +55,7 @@ func CreateManeuveringDraft_Component(c *fiber.Ctx) error {
 	}
 
 	ManeuveringDraftService := maneuveringDraft_service.ManeuveringDraft{
-		Pdfurl:  form.Pdfurl,
+		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}
@@ -85,7 +86,7 @@ func UpdateManeuveringDraft_Component(c *fiber.Ctx) error {
 		})
 	}
 	ManeuveringDraftService := maneuveringDraft_service.ManeuveringDraft{
-		Pdfurl:  form.Pdfurl,
+		Pdfurl:   form.Pdfurl,
 		Status:   form.Status,
 		PostDate: form.PostDate,
 	}

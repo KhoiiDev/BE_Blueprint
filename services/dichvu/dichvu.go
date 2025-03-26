@@ -30,8 +30,8 @@ type ObjectDichvu struct {
 	Status bool `gorm:"column:status" json:"status"`
 }
 
-func (a *Dichvu) GetDichvu_Service(limit int, page int, showHidden bool) (*[]models.ObjectDichvu, int64, error) {
-	item, totalRecords, err := models.GetDichvu_Model(limit, page, showHidden)
+func (a *Dichvu) GetDichvu_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectDichvu, int64, error) {
+	item, totalRecords, err := models.GetDichvu_Model(limit, page, name, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}

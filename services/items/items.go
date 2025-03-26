@@ -33,8 +33,8 @@ type ObjectItems struct {
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
 
-func (a *Items) GetItems_Service(limit int, page int, showHidden bool, item_type string) (*[]models.ObjectItems, int64, error) {
-	item, totalRecords, err := models.GetItems_Model(limit, page, showHidden, item_type)
+func (a *Items) GetItems_Service(limit int, page int, showHidden bool, name string, item_type string) (*[]models.ObjectItems, int64, error) {
+	item, totalRecords, err := models.GetItems_Model(limit, page, showHidden, name, item_type)
 	if err != nil {
 		return nil, totalRecords, err
 	}

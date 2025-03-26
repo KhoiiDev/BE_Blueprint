@@ -68,16 +68,15 @@ func Setup() {
 
 	DatabaseSetting.Type = "sqlserver"
 	DatabaseSetting.User = "sa"
-	DatabaseSetting.Password = "12345"
-	DatabaseSetting.Host = "KHOI:1433"
+	DatabaseSetting.Password = "taideptraiko"
+	DatabaseSetting.Host = "LAPTOPACER:1433"
 	DatabaseSetting.Name = "Blueprint"
 	DatabaseSetting.TablePrefix = ""
 
 	// AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 
-
 	AppSetting.ImageMaxSize = 50 * 1024 * 1024 // 50MB
-	AppSetting.ImageSavePath = "upload/files/"
+	AppSetting.ImageSavePath = "upload/files/images/"
 	AppSetting.FileMaxSize = 50 * 1024 * 1024 // 50MB
 
 	AppSetting.FileAllowExts = []string{".jpg", ".jpeg", ".png", ".pdf", ".txt"}

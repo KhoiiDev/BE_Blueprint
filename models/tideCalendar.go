@@ -24,7 +24,7 @@ type ObjectTideCalendar struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
-func GetTideCalendar_Model(limit int, page int, showHidden bool, date string) (*[]ObjectTideCalendar, int64, error) {
+func GetTideCalendar_Model(limit int, page int, showHidden bool, name string, date string) (*[]ObjectTideCalendar, int64, error) {
 	var results []ObjectTideCalendar
 	totalRecords := int64(0)
 	var err error
@@ -44,6 +44,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, date string) (*
 		err = db.Table("tide_calendars").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
+			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -60,6 +61,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, date string) (*
 			err = db.Table("tide_calendars").
 				Where("status = ? AND deleted_at IS NULL AND postdate = ?", 1, formattedDate).
 				Order("created_at DESC").
+				Where("title LIKE ?", "%"+name+"%").
 				Limit(1).
 				Find(&results).Error
 		} else {
@@ -67,6 +69,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, date string) (*
 			err = db.Table("tide_calendars").
 				Where("status = ? AND deleted_at IS NULL", 1).
 				Order("created_at DESC").
+				Where("title LIKE ?", "%"+name+"%").
 				Limit(1).
 				Find(&results).Error
 		}

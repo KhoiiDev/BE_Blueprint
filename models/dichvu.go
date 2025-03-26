@@ -29,7 +29,7 @@ type ObjectDichvu struct {
 	Status bool   `gorm:"column:status" json:"status"`
 }
 
-func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int64, error) {
+func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]ObjectDichvu, int64, error) {
 	var results []ObjectDichvu
 	totalRecords := int64(0)
 	var err error
@@ -48,6 +48,7 @@ func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int
 		err = db.Table("dichvus").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
+			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -60,6 +61,7 @@ func GetDichvu_Model(limit int, page int, showHidden bool) (*[]ObjectDichvu, int
 		err = db.Table("dichvus").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
+			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error

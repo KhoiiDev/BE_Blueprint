@@ -26,8 +26,8 @@ type ObjectNews struct {
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 }
 
-func (a *News) GetNews_Service(limit int, page int, showHidden bool) (*[]models.ObjectNews, int64, error) {
-	item, totalRecords, err := models.GetNews_Model(limit, page, showHidden)
+func (a *News) GetNews_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectNews, int64, error) {
+	item, totalRecords, err := models.GetNews_Model(limit, page, name, showHidden)
 	if err != nil {
 		return nil, totalRecords, err
 	}

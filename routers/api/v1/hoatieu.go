@@ -18,13 +18,14 @@ func GetAllNavigator_Component(c *fiber.Ctx) error {
 	item := hoatieu_service.Hoatieu{}
 	limit := c.Query("limit")
 	page := c.Query("page")
+	name := c.Query("name")
 	showHiddenItem := c.Query("showHiddenItem")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetAllNavigator_Service(limitStr, PageStr, showHidden)
+	data, totalRecords, err := item.GetAllNavigator_Service(limitStr, PageStr, name, showHidden)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

@@ -33,7 +33,7 @@ type ObjectItems struct {
 	ItemType string `gorm:"column:itemtype" json:"itemtype"`
 }
 
-func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]ObjectItems, int64, error) {
+func GetItems_Model(limit int, page int, showHidden bool, name string, item_type string) (*[]ObjectItems, int64, error) {
 	var results []ObjectItems
 	var totalRecords int64
 	var err error
@@ -47,6 +47,10 @@ func GetItems_Model(limit int, page int, showHidden bool, item_type string) (*[]
 	// Thêm điều kiện cho item_type
 	if item_type != "" {
 		query = query.Where("itemtype = ?", item_type)
+	}
+
+	if name != "undefined" && name != "" {
+		query = query.Where("title LIKE ?", "%"+name+"%")
 	}
 
 	if !showHidden {
