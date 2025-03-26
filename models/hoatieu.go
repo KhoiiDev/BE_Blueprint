@@ -22,7 +22,7 @@ type ObjectHoaTieu struct {
 	Name   string `gorm:"column:name" json:"name"`
 }
 
-func GetAllNavigator_Model(limit int, page int, showHidden bool) (*[]ObjectHoaTieu, int64, error) {
+func GetAllNavigator_Model(limit int, page int, name string, showHidden bool) (*[]ObjectHoaTieu, int64, error) {
 	var results []ObjectHoaTieu
 	totalRecords := int64(0)
 	var err error
@@ -43,6 +43,7 @@ func GetAllNavigator_Model(limit int, page int, showHidden bool) (*[]ObjectHoaTi
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
 			Limit(limit).
+			Where("name LIKE ?", "%"+name+"%").
 			Offset(offset).
 			Find(&results).Error
 	} else {

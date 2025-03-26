@@ -20,8 +20,8 @@ type ObjectManeuveringDraft struct {
 	Status   bool   `gorm:"column:status" json:"status"`
 }
 
-func (a *ManeuveringDraft) GetManeuveringDraft_Service(limit int, page int, showHidden bool, date string) (*[]models.ObjectManeuveringDraft, int64, error) {
-	item, totalRecords, err := models.GetManeuveringDraft_Model(limit, page, showHidden, date)
+func (a *ManeuveringDraft) GetManeuveringDraft_Service(limit int, page int, showHidden bool, name string, date string) (*[]models.ObjectManeuveringDraft, int64, error) {
+	item, totalRecords, err := models.GetManeuveringDraft_Model(limit, page, showHidden, name, date)
 	if err != nil {
 		return nil, 0, err
 	}

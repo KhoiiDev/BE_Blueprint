@@ -29,7 +29,7 @@ func Setup() {
 		PrepareStmt: true,
 	})
 
-	db.AutoMigrate(
+	db.AutoMigrate(&User{}, &UserCredentials{},
 		&Hoatieu{}, &Carousel{}, &Introduction{}, &Dichvu{}, &News{}, &ManeuveringDraft{}, &Servicelist{}, &Ship{},
 		&TideCalendar{}, &Items{},
 	)

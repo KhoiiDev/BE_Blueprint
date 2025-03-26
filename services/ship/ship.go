@@ -20,8 +20,8 @@ type ObjectShip struct {
 	Status bool   `gorm:"column:status" json:"status"`
 }
 
-func (a *Ship) GetShip_Service(limit int, page int, showHidden bool) (*[]models.ObjectShip, int64, error) {
-	item, totalRecords, err := models.GetShip_Model(limit, page, showHidden)
+func (a *Ship) GetShip_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectShip, int64, error) {
+	item, totalRecords, err := models.GetShip_Model(limit, page, name, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}

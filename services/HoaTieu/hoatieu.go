@@ -22,8 +22,8 @@ type ObjectHoaTieu struct {
 	Name   string `gorm:"column:name" json:"name"`
 }
 
-func (a *Hoatieu) GetAllNavigator_Service(limit int, page int, showHidden bool) (*[]models.ObjectHoaTieu, int64, error) {
-	item, totalRecords, err := models.GetAllNavigator_Model(limit, page, showHidden)
+func (a *Hoatieu) GetAllNavigator_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectHoaTieu, int64, error) {
+	item, totalRecords, err := models.GetAllNavigator_Model(limit, page, name, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}

@@ -28,8 +28,8 @@ type ObjectServicelist struct {
 	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
-func (a *Servicelist) GetServiceList_Service(limit int, PageStr int, showHidden bool) (*[]models.ObjectServicelist, int64, error) {
-	item, totalRecords, err := models.GetServiceList_Model(limit, PageStr, showHidden)
+func (a *Servicelist) GetServiceList_Service(limit int, PageStr int, name string, showHidden bool) (*[]models.ObjectServicelist, int64, error) {
+	item, totalRecords, err := models.GetServiceList_Model(limit, PageStr, name, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}

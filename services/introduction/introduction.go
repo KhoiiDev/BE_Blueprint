@@ -18,8 +18,8 @@ type ObjectIntroduction struct {
 	Status  bool   `gorm:"column:status" json:"status"`
 }
 
-func (a *Introduction) GetIntroduction_Service(limit int, page int, showHidden bool) (*[]models.ObjectIntroduction, int64, error) {
-	item, totalRecords, err := models.GetIntroduction_Model(limit, page, showHidden)
+func (a *Introduction) GetIntroduction_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectIntroduction, int64, error) {
+	item, totalRecords, err := models.GetIntroduction_Model(limit, page, name, showHidden)
 	if err != nil {
 		return nil, 0, err
 	}

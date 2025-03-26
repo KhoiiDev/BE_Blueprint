@@ -26,7 +26,7 @@ type ObjectNews struct {
 	Postdate string `gorm:"column:postdate" json:"postdate"`
 }
 
-func GetNews_Model(limit int, page int, showHidden bool) (*[]ObjectNews, int64, error) {
+func GetNews_Model(limit int, page int, name string, showHidden bool) (*[]ObjectNews, int64, error) {
 	var results []ObjectNews
 	totalRecords := int64(0)
 	var err error
@@ -45,6 +45,7 @@ func GetNews_Model(limit int, page int, showHidden bool) (*[]ObjectNews, int64, 
 		err = db.Table("news").
 			Where("deleted_at IS NULL").
 			Order("created_at DESC").
+			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -59,6 +60,7 @@ func GetNews_Model(limit int, page int, showHidden bool) (*[]ObjectNews, int64, 
 		err = db.Table("news").
 			Where("status = ? AND deleted_at IS NULL", 1).
 			Order("created_at DESC").
+			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error

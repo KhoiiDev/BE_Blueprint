@@ -29,12 +29,13 @@ func GetItems_Component(c *fiber.Ctx) error {
 	page := c.Query("page")
 	showHiddenItem := c.Query("showHiddenItem")
 	item_type := c.Query("itemType")
+	name := c.Query("name")
 
 	limitStr, err := strconv.Atoi(limit)
 	PageStr, err := strconv.Atoi(page)
 	showHidden, err := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetItems_Service(limitStr, PageStr, showHidden, item_type)
+	data, totalRecords, err := item.GetItems_Service(limitStr, PageStr, showHidden, name, item_type)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
