@@ -38,13 +38,12 @@ func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]Obje
 	offset := (page - 1) * limit
 
 	// Truy vấn để đếm tổng số bản ghi
-	err = db.Table("dichvus").Where("deleted_at IS NULL").Count(&totalRecords).Error
-	if err != nil {
-		return nil, 0, err
-	}
 
 	if showHidden {
-
+		err = db.Table("dichvus").Where("deleted_at IS NULL").Count(&totalRecords).Error
+		if err != nil {
+			return nil, 0, err
+		}
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("dichvus").
 			Where("deleted_at IS NULL").
@@ -54,6 +53,10 @@ func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]Obje
 			Offset(offset).
 			Find(&results).Error
 	} else {
+		err = db.Table("servicelists").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
+		if err != nil {
+			return nil, 0, err
+		}
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("dichvus").
 			Where("status = ? AND deleted_at IS NULL", 1).
