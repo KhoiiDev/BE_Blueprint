@@ -164,6 +164,20 @@ func InitRouter(r *fiber.App) {
 	items.Put("/:id", v1.UpdateItems_Component)
 	items.Delete("/:id", v1.DeleteItems_Component)
 
+	// Category Maneuvering Draft
+	kehoachdantau := apiv1.Group("/kehoachdantau")
+	kehoachdantau.Get("/", v1.GetKehoachdantau_Component)
+	kehoachdantau.Post("/", v1.CreateKehoachdantau_Component)
+	kehoachdantau.Put("/:id", v1.UpdateKehoachdantau_Component)
+	kehoachdantau.Delete("/:id", v1.DeleteKehoachdantau_Component)
+
+	// Switch routes
+	// Switch Maneuvering Draft
+	switchGroup := apiv1.Group("/switch")
+	switchGroup.Get("/:id", v1.GetSwitch_Component)
+	switchGroup.Post("/", v1.CreateSwitch_Component)
+	switchGroup.Put("/:id", v1.UpdateSwitch_Component)
+	switchGroup.Delete("/:id", v1.DeleteSwitch_Component)
 }
 
 // func MaxUploadSize(maxSize int64) fiber.Handler {

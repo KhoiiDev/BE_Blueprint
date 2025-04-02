@@ -12,7 +12,7 @@ import (
 
 func init() {
 	setting.Setup()
-	models.Setup()
+	models.Setup() // Hàm này sẽ tự động khởi tạo dòng mặc định cho Switch}
 }
 
 func main() {
@@ -23,6 +23,8 @@ func main() {
 		JSONDecoder:  sonic.Unmarshal,
 		BodyLimit:    setting.ServerSetting.VideoLimit,
 	})
+
+	// Gán db cho package v1
 
 	r.Use(cors.New())
 
