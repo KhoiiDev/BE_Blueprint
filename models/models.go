@@ -63,6 +63,8 @@ func Setup() {
 
 	// Auto migrate các model
 	err = db.AutoMigrate(
+		&Header{},
+		&Footer{},
 		&Switch{},
 		&Kehoachdantau{},
 		&User{},
