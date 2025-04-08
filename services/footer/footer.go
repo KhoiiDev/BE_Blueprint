@@ -42,7 +42,6 @@ func (f *Footer) CreateFooter_Service() error {
 		"address":      f.Address,
 		"fax":          f.Fax,
 		"mst":          f.Mst,
-
 		"email":        f.Email,
 		"number_phone": f.NumberPhone,
 		"branch_name":  f.BranchName,
