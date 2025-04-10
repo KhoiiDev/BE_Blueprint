@@ -8,22 +8,28 @@ import (
 
 type News struct {
 	gorm.Model
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	Postdate string `gorm:"column:postdate" json:"postdate"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
 }
 
 type ObjectNews struct {
-	ID       uint   `gorm:"column:id" json:"id"`
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	Postdate string `gorm:"column:postdate" json:"postdate"`
+	ID         uint   `gorm:"column:id" json:"id"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
 }
 
 func GetNews_Model(limit int, page int, name string, showHidden bool) (*[]ObjectNews, int64, error) {
@@ -31,36 +37,33 @@ func GetNews_Model(limit int, page int, name string, showHidden bool) (*[]Object
 	totalRecords := int64(0)
 	var err error
 
-	// Tính offset dựa trên limit và page
 	offset := (page - 1) * limit
 
 	if showHidden {
-		// Truy vấn để đếm tổng số bản ghi
 		err = db.Table("news").Where("deleted_at IS NULL").Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
 
-		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("news").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
 			Where("title LIKE ?", "%"+name+"%").
+			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
 	} else {
-
-		// Truy vấn để đếm tổng số bản ghi
-		err = db.Table("news").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
+		err = db.Table("news").
+			Where("status = ? AND deleted_at IS NULL", 1).
+			Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
-		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
+
 		err = db.Table("news").
 			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
 			Where("title LIKE ?", "%"+name+"%").
+			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -73,22 +76,20 @@ func GetNews_Model(limit int, page int, name string, showHidden bool) (*[]Object
 	return &results, totalRecords, nil
 }
 
-// Corrected CreateNews_Model function
 func CreateNews_Model(data map[string]interface{}) error {
-	// Create a News object using the provided data
 	item := News{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Image:    data["image"].(string),
-		Status:   data["status"].(bool),
-		Content:  data["content"].(string),
-		Postdate: data["postdate"].(string), // Ensure the type matches
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Image:      data["image"].(string),
+		Status:     data["status"].(bool),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Postdate:   data["postdate"].(string),
 	}
 
-	// Insert into the database
-	result := db.Create(&item)
-
-	if err := result.Error; err != nil {
+	if err := db.Create(&item).Error; err != nil {
 		return err
 	}
 	return nil
@@ -96,22 +97,28 @@ func CreateNews_Model(data map[string]interface{}) error {
 
 func UpdateNews_Model(id string, data map[string]interface{}) error {
 	item := News{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Image:    data["image"].(string),
-		Status:   data["status"].(bool),
-		Content:  data["content"].(string),
-		Postdate: data["postdate"].(string), // Ensure the type matches
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Image:      data["image"].(string),
+		Status:     data["status"].(bool),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Postdate:   data["postdate"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"title":      item.Title,
-		"subtitle":   item.SubTitle,
-		"image":      item.Image,
-		"status":     item.Status,
-		"postdate":   item.Postdate,
-		"content":    item.Content,
-		"updated_at": time.Now(),
+		"title":       item.Title,
+		"title_en":    item.TitleEN,
+		"subtitle":    item.SubTitle,
+		"subtitle_en": item.SubTitleEN,
+		"image":       item.Image,
+		"status":      item.Status,
+		"content":     item.Content,
+		"content_en":  item.ContentEN,
+		"postdate":    item.Postdate,
+		"updated_at":  time.Now(),
 	}).Error; err != nil {
 		return err
 	}
@@ -119,14 +126,14 @@ func UpdateNews_Model(id string, data map[string]interface{}) error {
 }
 
 func CheckDeletedAt_Model(id string) (bool, error) {
-	var new News
-	if err := db.Select("deleted_at").Where("id = ?", id).First(&new).Error; err != nil {
+	var news News
+	if err := db.Select("deleted_at").Where("id = ?", id).First(&news).Error; err != nil {
 		return false, err
 	}
-	return new.DeletedAt.Valid, nil
+	return news.DeletedAt.Valid, nil
 }
+
 func DeleteNews_Model(id string) error {
-	// Check if DeletedAt is not NULL
 	isDeleted, err := CheckDeletedAt_Model(id)
 	if err != nil {
 		return err
@@ -135,8 +142,6 @@ func DeleteNews_Model(id string) error {
 		if err := db.Delete(&News{}, id).Error; err != nil {
 			return err
 		}
-
 	}
-
 	return nil
 }

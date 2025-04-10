@@ -4,18 +4,19 @@ import (
 	news_service "be-hoatieu/services/news"
 	"strconv"
 
-	// "time"
-
 	"github.com/gofiber/fiber/v2"
 )
 
 type News struct {
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	PostDate string `gorm:"column:postdate" json:"postdate"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	PostDate   string `gorm:"column:postdate" json:"postdate"`
 }
 
 func GetNews_Component(c *fiber.Ctx) error {
@@ -26,12 +27,11 @@ func GetNews_Component(c *fiber.Ctx) error {
 	name := c.Query("name")
 	showHiddenItem := c.Query("showHiddenItem")
 
-	limitStr, err := strconv.Atoi(limit)
-	PageStr, err := strconv.Atoi(page)
-	showHidden, err := strconv.ParseBool(showHiddenItem)
+	limitStr, _ := strconv.Atoi(limit)
+	pageStr, _ := strconv.Atoi(page)
+	showHidden, _ := strconv.ParseBool(showHiddenItem)
 
-	data, totalRecords, err := item.GetNews_Service(limitStr, PageStr, name, showHidden)
-
+	data, totalRecords, err := item.GetNews_Service(limitStr, pageStr, name, showHidden)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -48,10 +48,7 @@ func GetNews_Component(c *fiber.Ctx) error {
 
 func CreateNews_Component(c *fiber.Ctx) error {
 	form := &News{}
-
-	// Check, if received JSON data is valid.
 	if err := c.BodyParser(form); err != nil {
-		// Return status 400 and error message.
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -59,12 +56,15 @@ func CreateNews_Component(c *fiber.Ctx) error {
 	}
 
 	NewsService := news_service.News{
-		Title:    form.Title,
-		SubTitle: form.SubTitle,
-		Image:    form.Image,
-		Status:   form.Status,
-		Content:  form.Content,
-		Postdate: form.PostDate,
+		Title:      form.Title,
+		TitleEN:    form.TitleEN,
+		SubTitle:   form.SubTitle,
+		SubTitleEN: form.SubTitleEN,
+		Image:      form.Image,
+		Status:     form.Status,
+		Content:    form.Content,
+		ContentEN:  form.ContentEN,
+		Postdate:   form.PostDate,
 	}
 	if err := NewsService.CreateNews_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -73,13 +73,17 @@ func CreateNews_Component(c *fiber.Ctx) error {
 		})
 	}
 
-	data := make(map[string]string)
-	data["Title"] = form.Title
-	data["SubTitle"] = form.SubTitle
-	data["Image"] = form.Image
-	data["Content"] = form.Content
-	data["PostDate"] = form.PostDate
-	data["Status"] = strconv.FormatBool(form.Status)
+	data := map[string]string{
+		"Title":      form.Title,
+		"TitleEN":    form.TitleEN,
+		"SubTitle":   form.SubTitle,
+		"SubTitleEN": form.SubTitleEN,
+		"Image":      form.Image,
+		"Content":    form.Content,
+		"ContentEN":  form.ContentEN,
+		"PostDate":   form.PostDate,
+		"Status":     strconv.FormatBool(form.Status),
+	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
@@ -95,25 +99,31 @@ func UpdateNews_Component(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
+
 	NewsService := news_service.News{
-		Title:    form.Title,
-		SubTitle: form.SubTitle,
-		Image:    form.Image,
-		Status:   form.Status,
-		Content:  form.Content,
-		Postdate: form.PostDate,
+		Title:      form.Title,
+		TitleEN:    form.TitleEN,
+		SubTitle:   form.SubTitle,
+		SubTitleEN: form.SubTitleEN,
+		Image:      form.Image,
+		Status:     form.Status,
+		Content:    form.Content,
+		ContentEN:  form.ContentEN,
+		Postdate:   form.PostDate,
 	}
 
 	err := NewsService.UpdateNews_Service(c.Params("id"))
-
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
-			"msg":   "Register false",
+			"msg":   "Cập nhật không thành công",
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(NewsService)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    NewsService,
+	})
 }
 
 func DeleteNews_Component(c *fiber.Ctx) error {
@@ -123,7 +133,7 @@ func DeleteNews_Component(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":   true,
-			"message": "Delete failed: " + err.Error(),
+			"message": "Xoá thất bại: " + err.Error(),
 		})
 	}
 

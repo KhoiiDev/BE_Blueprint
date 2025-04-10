@@ -15,6 +15,7 @@ type Footer struct {
 	Email       string `gorm:"column:email" json:"email"`
 	NumberPhone string `gorm:"column:number_phone" json:"number_phone"`
 	BranchName  string `gorm:"column:branch_name" json:"branch_name"`
+	Linkfb      string `gorm:"column:linkfb" json:"linkfb"`
 }
 
 type ObjectFooter struct {
@@ -27,6 +28,7 @@ type ObjectFooter struct {
 	Email       string `gorm:"column:email" json:"email"`
 	NumberPhone string `gorm:"column:number_phone" json:"number_phone"`
 	BranchName  string `gorm:"column:branch_name" json:"branch_name"`
+	Linkfb      string `gorm:"column:linkfb" json:"linkfb"`
 }
 
 func GetFooter_Model(limit int, page int, showHidden bool, name string) (*[]ObjectFooter, int64, error) {
@@ -73,6 +75,7 @@ func CreateFooter_Model(data map[string]interface{}) error {
 		Email:       data["email"].(string),
 		NumberPhone: data["number_phone"].(string),
 		BranchName:  data["branch_name"].(string),
+		Linkfb:      data["linkfb"].(string),
 	}
 
 	// Insert into the database
@@ -93,6 +96,7 @@ func UpdateFooter_Model(id string, data map[string]interface{}) error {
 		Email:       data["email"].(string),
 		NumberPhone: data["number_phone"].(string),
 		BranchName:  data["branch_name"].(string),
+		Linkfb:      data["linkfb"].(string),
 	}
 
 	if err := db.Model(&footer).Where("id = ?", id).Updates(map[string]interface{}{
@@ -103,6 +107,7 @@ func UpdateFooter_Model(id string, data map[string]interface{}) error {
 		"email":        footer.Email,
 		"number_phone": footer.NumberPhone,
 		"branch_name":  footer.BranchName,
+		"linkfb":       footer.Linkfb,
 		"updated_at":   time.Now(),
 	}).Error; err != nil {
 		return err

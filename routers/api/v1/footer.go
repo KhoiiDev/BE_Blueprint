@@ -17,6 +17,7 @@ type Footer struct {
 	Email       string `gorm:"column:email" json:"email"`
 	NumberPhone string `gorm:"column:number_phone" json:"number_phone"`
 	BranchName  string `gorm:"column:branch_name" json:"branch_name"`
+	Linkfb      string `gorm:"column:linkfb" json:"linkfb"`
 }
 
 func GetFooter_Component(c *fiber.Ctx) error {
@@ -65,6 +66,7 @@ func CreateFooter_Component(c *fiber.Ctx) error {
 		Mst:         form.Mst,
 		Email:       form.Email,
 		NumberPhone: form.NumberPhone,
+		Linkfb:      form.Linkfb,
 	}
 	if err := FooterService.CreateFooter_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -81,6 +83,7 @@ func CreateFooter_Component(c *fiber.Ctx) error {
 	data["Email"] = form.Email
 	data["NumberPhone"] = form.NumberPhone
 	data["BranchName"] = form.BranchName
+	data["Linkfb"] = form.Linkfb
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
@@ -104,6 +107,7 @@ func UpdateFooter_Component(c *fiber.Ctx) error {
 		Email:       form.Email,
 		NumberPhone: form.NumberPhone,
 		BranchName:  form.BranchName,
+		Linkfb:      form.Linkfb,
 	}
 
 	err := FooterService.UpdateFooter_Service(c.Params("id"))
