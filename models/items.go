@@ -8,29 +8,34 @@ import (
 
 type Items struct {
 	gorm.Model
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	Postdate string `gorm:"column:postdate" json:"postdate"`
-	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
-	Videourl string `gorm:"column:videourl" json:"videourl"`
-	ItemType string `gorm:"column:itemtype" json:"itemtype"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
+	Videourl   string `gorm:"column:videourl" json:"videourl"`
+	ItemType   string `gorm:"column:itemtype" json:"itemtype"`
 }
 
 type ObjectItems struct {
-	ID       uint   `gorm:"column:id" json:"id"`
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Image    string `gorm:"column:image" json:"image"`
-	Status   bool   `gorm:"column:status" json:"status"`
-	Content  string `gorm:"column:content" json:"content"`
-	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
-	Videourl string `gorm:"column:videourl" json:"videourl"`
-
-	Postdate string `gorm:"column:postdate" json:"postdate"`
-	ItemType string `gorm:"column:itemtype" json:"itemtype"`
+	ID         uint   `gorm:"column:id" json:"id"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
+	Videourl   string `gorm:"column:videourl" json:"videourl"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	ItemType   string `gorm:"column:itemtype" json:"itemtype"`
 }
 
 func GetItems_Model(limit int, page int, showHidden bool, name string, item_type string) (*[]ObjectItems, int64, error) {
@@ -38,13 +43,10 @@ func GetItems_Model(limit int, page int, showHidden bool, name string, item_type
 	var totalRecords int64
 	var err error
 
-	// Tính offset dựa trên limit và page
 	offset := (page - 1) * limit
 
-	// Tạo truy vấn cơ bản
 	query := db.Table("items").Where("deleted_at IS NULL")
 
-	// Thêm điều kiện cho item_type
 	if item_type != "" {
 		query = query.Where("itemtype = ?", item_type)
 	}
@@ -54,17 +56,14 @@ func GetItems_Model(limit int, page int, showHidden bool, name string, item_type
 	}
 
 	if !showHidden {
-		// Thêm điều kiện status nếu không hiển thị item ẩn
 		query = query.Where("status = ?", 1)
 	}
 
-	// Tính tổng số bản ghi
 	err = query.Count(&totalRecords).Error
 	if err != nil {
 		return nil, 0, err
 	}
 
-	// Lấy dữ liệu với limit và offset
 	err = query.Order("created_at DESC").
 		Limit(limit).
 		Offset(offset).
@@ -77,24 +76,23 @@ func GetItems_Model(limit int, page int, showHidden bool, name string, item_type
 	return &results, totalRecords, nil
 }
 
-// Corrected Createitems_Model function
 func CreateItems_Model(data map[string]interface{}) error {
-	// Create a items object using the provided data
 	item := Items{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Image:    data["image"].(string),
-		Pdfurl:   data["pdfurl"].(string),
-		Status:   data["status"].(bool),
-		Content:  data["content"].(string),
-		Videourl: data["videourl"].(string),
-		Postdate: data["postdate"].(string),
-		ItemType: data["itemtype"].(string),
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Image:      data["image"].(string),
+		Pdfurl:     data["pdfurl"].(string),
+		Status:     data["status"].(bool),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Videourl:   data["videourl"].(string),
+		Postdate:   data["postdate"].(string),
+		ItemType:   data["itemtype"].(string),
 	}
 
-	// Insert into the database
 	result := db.Create(&item)
-
 	if err := result.Error; err != nil {
 		return err
 	}
@@ -103,27 +101,32 @@ func CreateItems_Model(data map[string]interface{}) error {
 
 func UpdateItems_Model(id string, data map[string]interface{}) error {
 	item := Items{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Image:    data["image"].(string),
-		Pdfurl:   data["pdfurl"].(string),
-		Videourl: data["videourl"].(string),
-
-		Status:   data["status"].(bool),
-		Content:  data["content"].(string),
-		Postdate: data["postdate"].(string),
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Image:      data["image"].(string),
+		Pdfurl:     data["pdfurl"].(string),
+		Videourl:   data["videourl"].(string),
+		Status:     data["status"].(bool),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Postdate:   data["postdate"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"title":      item.Title,
-		"subtitle":   item.SubTitle,
-		"pdfurl":     item.Pdfurl,
-		"image":      item.Image,
-		"videourl":   item.Videourl,
-		"status":     item.Status,
-		"postdate":   item.Postdate,
-		"content":    item.Content,
-		"updated_at": time.Now(),
+		"title":       item.Title,
+		"title_en":    item.TitleEN,
+		"subtitle":    item.SubTitle,
+		"subtitle_en": item.SubTitleEN,
+		"image":       item.Image,
+		"pdfurl":      item.Pdfurl,
+		"videourl":    item.Videourl,
+		"status":      item.Status,
+		"content":     item.Content,
+		"content_en":  item.ContentEN,
+		"postdate":    item.Postdate,
+		"updated_at":  time.Now(),
 	}).Error; err != nil {
 		return err
 	}
@@ -133,14 +136,33 @@ func UpdateItems_Model(id string, data map[string]interface{}) error {
 func DeleteItems_Model(id string) error {
 	var item Items
 	if err := db.Select("deleted_at").Where("id = ?", id).First(&item).Error; err != nil {
-		// Nếu không tìm thấy bản ghi, trả về lỗi
 		return err
 	}
 
-	// Tiến hành xóa bản ghi
 	if err := db.Delete(&Items{}, id).Error; err != nil {
 		return err
 	}
 
+	return nil
+}
+
+func CheckDeletedAtItems_Model(id string) (bool, error) {
+	var item Items
+	if err := db.Select("deleted_at").Where("id = ?", id).First(&item).Error; err != nil {
+		return false, err
+	}
+	return item.DeletedAt.Valid, nil
+}
+
+func DeleteItems_Model_WithCheck(id string) error {
+	isDeleted, err := CheckDeletedAtItems_Model(id)
+	if err != nil {
+		return err
+	}
+	if !isDeleted {
+		if err := db.Delete(&Items{}, id).Error; err != nil {
+			return err
+		}
+	}
 	return nil
 }

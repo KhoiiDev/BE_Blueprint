@@ -15,6 +15,7 @@ type Footer struct {
 	Email       string `gorm:"column:email" json:"email"`
 	NumberPhone string `gorm:"column:number_phone" json:"number_phone"`
 	BranchName  string `gorm:"column:branch_name" json:"branch_name"`
+	Linkfb      string `gorm:"column:linkfb" json:"linkfb"`
 }
 
 type ObjectFooter struct {
@@ -26,6 +27,7 @@ type ObjectFooter struct {
 	Email       string `gorm:"column:email" json:"email"`
 	NumberPhone string `gorm:"column:number_phone" json:"number_phone"`
 	BranchName  string `gorm:"column:branch_name" json:"branch_name"`
+	Linkfb      string `gorm:"column:linkfb" json:"linkfb"`
 }
 
 func (f *Footer) GetFooter_Service(limit int, page int, name string) (*[]models.ObjectFooter, int64, error) {
@@ -42,10 +44,10 @@ func (f *Footer) CreateFooter_Service() error {
 		"address":      f.Address,
 		"fax":          f.Fax,
 		"mst":          f.Mst,
-
 		"email":        f.Email,
 		"number_phone": f.NumberPhone,
 		"branch_name":  f.BranchName,
+		"linkfb":       f.Linkfb,
 	}
 	if err := models.CreateFooter_Model(footer); err != nil {
 		return err
@@ -62,6 +64,7 @@ func (f *Footer) UpdateFooter_Service(id string) error {
 		"email":        f.Email,
 		"number_phone": f.NumberPhone,
 		"branch_name":  f.BranchName,
+		"linkfb":       f.Linkfb,
 	}
 	if err := models.UpdateFooter_Model(id, footer); err != nil {
 		return err

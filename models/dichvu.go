@@ -8,60 +8,61 @@ import (
 
 type Dichvu struct {
 	gorm.Model
-	Title    string `gorm:"column:title" json:"title"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Content  string `gorm:"column:content" json:"content"`
-	Image    string `gorm:"column:image" json:"image"`
-	Pdfurl   string `gorm:"column:pdfurl" json:"pdfurl"`
-	Postdate string `gorm:"column:postdate" json:"postdate"`
-	Status   bool   `gorm:"column:status" json:"status"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Status     bool   `gorm:"column:status" json:"status"`
 }
 
 type ObjectDichvu struct {
-	ID       uint   `gorm:"column:id" json:"id"`
-	Title    string `gorm:"column:title" json:"title"`
-	Image    string `gorm:"column:image" json:"image"`
-	SubTitle string `gorm:"column:subtitle" json:"subtitle"`
-	Content  string `gorm:"column:content" json:"content"`
-	Postdate string `gorm:"column:postdate" json:"postdate"`
-
-	Pdfurl string `gorm:"column:pdfurl" json:"pdfurl"`
-	Status bool   `gorm:"column:status" json:"status"`
+	ID         uint   `gorm:"column:id" json:"id"`
+	Title      string `gorm:"column:title" json:"title"`
+	TitleEN    string `gorm:"column:title_en" json:"title_en"`
+	SubTitle   string `gorm:"column:subtitle" json:"subtitle"`
+	SubTitleEN string `gorm:"column:subtitle_en" json:"subtitle_en"`
+	Content    string `gorm:"column:content" json:"content"`
+	ContentEN  string `gorm:"column:content_en" json:"content_en"`
+	Image      string `gorm:"column:image" json:"image"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
+	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Status     bool   `gorm:"column:status" json:"status"`
 }
 
 func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]ObjectDichvu, int64, error) {
 	var results []ObjectDichvu
 	totalRecords := int64(0)
-	var err error
-
-	// Tính offset dựa trên limit và page
 	offset := (page - 1) * limit
-
-	// Truy vấn để đếm tổng số bản ghi
+	var err error
 
 	if showHidden {
 		err = db.Table("dichvus").Where("deleted_at IS NULL").Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
-		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("dichvus").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
 			Where("title LIKE ?", "%"+name+"%").
+			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
 	} else {
-		err = db.Table("servicelists").Where("status = ? AND deleted_at IS NULL", 1).Count(&totalRecords).Error
+		err = db.Table("dichvus").
+			Where("status = ? AND deleted_at IS NULL", true).
+			Count(&totalRecords).Error
 		if err != nil {
 			return nil, 0, err
 		}
-		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("dichvus").
-			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
+			Where("status = ? AND deleted_at IS NULL", true).
 			Where("title LIKE ?", "%"+name+"%").
+			Order("created_at DESC").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -74,67 +75,73 @@ func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]Obje
 	return &results, totalRecords, nil
 }
 
-// Corrected CreateNews_Model function
 func CreateDichvu_Model(data map[string]interface{}) error {
-	// Create a News object using the provided data
 	item := Dichvu{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Content:  data["content"].(string),
-		Image:    data["image"].(string),
-		Postdate: data["postdate"].(string),
-		Status:   data["status"].(bool),
-		Pdfurl:   data["pdfurl"].(string),
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Image:      data["image"].(string),
+		Pdfurl:     data["pdfurl"].(string),
+		Postdate:   data["postdate"].(string),
+		Status:     data["status"].(bool),
 	}
 
-	// Insert into the database
-	result := db.Create(&item)
-
-	if err := result.Error; err != nil {
-		return err
-	}
-	return nil
+	return db.Create(&item).Error
 }
 
 func UpdateDichvu_Model(id string, data map[string]interface{}) error {
 	item := Dichvu{
-		Title:    data["title"].(string),
-		SubTitle: data["subtitle"].(string),
-		Content:  data["content"].(string),
-		Image:    data["image"].(string),
-		Postdate: data["postdate"].(string),
-
-		Status: data["status"].(bool),
-		Pdfurl: data["pdfurl"].(string),
+		Title:      data["title"].(string),
+		TitleEN:    data["title_en"].(string),
+		SubTitle:   data["subtitle"].(string),
+		SubTitleEN: data["subtitle_en"].(string),
+		Content:    data["content"].(string),
+		ContentEN:  data["content_en"].(string),
+		Image:      data["image"].(string),
+		Pdfurl:     data["pdfurl"].(string),
+		Postdate:   data["postdate"].(string),
+		Status:     data["status"].(bool),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
-		"title":      item.Title,
-		"subtitle":   item.SubTitle,
-		"content":    item.Content,
-		"postdate":   item.Postdate,
-		"image":      item.Image,
-		"status":     item.Status,
-		"pdfurl":     item.Pdfurl,
-		"updated_at": time.Now(),
+		"title":       item.Title,
+		"title_en":    item.TitleEN,
+		"subtitle":    item.SubTitle,
+		"subtitle_en": item.SubTitleEN,
+		"content":     item.Content,
+		"content_en":  item.ContentEN,
+		"image":       item.Image,
+		"pdfurl":      item.Pdfurl,
+		"postdate":    item.Postdate,
+		"status":      item.Status,
+		"updated_at":  time.Now(),
 	}).Error; err != nil {
 		return err
 	}
+
 	return nil
 }
 
+func CheckDeletedAtDichvu_Model(id string) (bool, error) {
+	var item Dichvu
+	if err := db.Select("deleted_at").Where("id = ?", id).First(&item).Error; err != nil {
+		return false, err
+	}
+	return item.DeletedAt.Valid, nil
+}
+
 func DeleteDichvu_Model(id string) error {
-	// Tìm kiếm bản ghi dựa trên ID
-	var dichvu Dichvu
-	if err := db.Select("deleted_at").Where("id = ?", id).First(&dichvu).Error; err != nil {
-		// Nếu không tìm thấy bản ghi, trả về lỗi
+	isDeleted, err := CheckDeletedAtDichvu_Model(id)
+	if err != nil {
 		return err
 	}
-
-	// Tiến hành xóa bản ghi
-	if err := db.Delete(&Dichvu{}, id).Error; err != nil {
-		return err
+	if !isDeleted {
+		if err := db.Delete(&Dichvu{}, id).Error; err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
