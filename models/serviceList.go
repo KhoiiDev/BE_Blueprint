@@ -49,7 +49,7 @@ func GetServiceList_Model(limit int, page int, name string, showHidden bool) (*[
 
 		err = db.Table("servicelists").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
+			Order("created_at").
 			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
@@ -61,7 +61,7 @@ func GetServiceList_Model(limit int, page int, name string, showHidden bool) (*[
 		}
 		err = db.Table("servicelists").
 			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
+			Order("created_at").
 			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).

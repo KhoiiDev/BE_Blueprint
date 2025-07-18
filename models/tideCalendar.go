@@ -43,7 +43,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, name string, da
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("tide_calendars").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
+			Order("created_at").
 			Where("title LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
@@ -60,7 +60,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, name string, da
 			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
 			err = db.Table("tide_calendars").
 				Where("status = ? AND deleted_at IS NULL AND postdate = ?", 1, formattedDate).
-				Order("created_at DESC").
+				Order("created_at").
 				Where("title LIKE ?", "%"+name+"%").
 				Limit(1).
 				Find(&results).Error
@@ -68,7 +68,7 @@ func GetTideCalendar_Model(limit int, page int, showHidden bool, name string, da
 			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
 			err = db.Table("tide_calendars").
 				Where("status = ? AND deleted_at IS NULL", 1).
-				Order("created_at DESC").
+				Order("created_at").
 				Where("title LIKE ?", "%"+name+"%").
 				Limit(1).
 				Find(&results).Error

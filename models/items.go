@@ -64,7 +64,7 @@ func GetItems_Model(limit int, page int, showHidden bool, name string, item_type
 		return nil, 0, err
 	}
 
-	err = query.Order("created_at DESC").
+	err = query.Order("created_at").
 		Limit(limit).
 		Offset(offset).
 		Find(&results).Error

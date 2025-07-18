@@ -36,7 +36,7 @@ func GetIntroduction_Model(limit int, page int, name string, showHidden bool) (*
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("introductions").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
+			Order("created_at").
 			Where("content LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).
@@ -45,7 +45,7 @@ func GetIntroduction_Model(limit int, page int, name string, showHidden bool) (*
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("introductions").
 			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
+			Order("created_at").
 			Where("content LIKE ?", "%"+name+"%").
 			Limit(1).
 			Find(&results).Error
