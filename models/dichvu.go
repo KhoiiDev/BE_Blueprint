@@ -48,7 +48,7 @@ func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]Obje
 		err = db.Table("dichvus").
 			Where("deleted_at IS NULL").
 			Where("title LIKE ?", "%"+name+"%").
-			Order("created_at DESC").
+			Order("created_at").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -62,7 +62,7 @@ func GetDichvu_Model(limit int, page int, name string, showHidden bool) (*[]Obje
 		err = db.Table("dichvus").
 			Where("status = ? AND deleted_at IS NULL", true).
 			Where("title LIKE ?", "%"+name+"%").
-			Order("created_at DESC").
+			Order("created_at").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error

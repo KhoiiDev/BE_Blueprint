@@ -40,7 +40,7 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool, name string
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("maneuvering_drafts").
 			Where("deleted_at IS NULL").
-			Order("created_at DESC").
+			Order("created_at").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -56,14 +56,14 @@ func GetManeuveringDraft_Model(limit int, page int, showHidden bool, name string
 			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
 			err = db.Table("maneuvering_drafts").
 				Where("status = ? AND deleted_at IS NULL AND postdate = ?", 1, formattedDate).
-				Order("created_at DESC").
+				Order("created_at").
 				Limit(1).
 				Find(&results).Error
 		} else {
 			// Truy vấn dữ liệu dựa trên limit, status = 1 và PostDate
 			err = db.Table("maneuvering_drafts").
 				Where("status = ? AND deleted_at IS NULL", 1).
-				Order("created_at DESC").
+				Order("created_at").
 				Limit(1).
 				Find(&results).Error
 		}

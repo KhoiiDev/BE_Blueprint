@@ -40,7 +40,7 @@ func GetShip_Model(limit int, page int, name string, showHidden bool) (*[]Object
 		err = db.Table("ships").
 			Where("deleted_at IS NULL").
 			Where("name LIKE ?", "%"+name+"%").
-			Order("created_at DESC").
+			Order("created_at").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -54,7 +54,7 @@ func GetShip_Model(limit int, page int, name string, showHidden bool) (*[]Object
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("ships").
 			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at DESC").
+			Order("created_at").
 			Where("name LIKE ?", "%"+name+"%").
 			Limit(limit).
 			Offset(offset).

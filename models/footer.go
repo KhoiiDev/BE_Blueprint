@@ -53,7 +53,7 @@ func GetFooter_Model(limit int, page int, showHidden bool, name string) (*[]Obje
 	}
 
 	// Lấy dữ liệu với limit và offset
-	err = query.Order("created_at DESC").
+	err = query.Order("created_at").
 		Limit(limit).
 		Offset(offset).
 		Find(&results).Error
