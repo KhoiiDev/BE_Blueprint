@@ -12,6 +12,7 @@ type Hoatieu struct {
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
+	Sort   uint   `gorm:"column:sort" json:"sort"`
 }
 
 type ObjectHoaTieu struct {
@@ -20,6 +21,7 @@ type ObjectHoaTieu struct {
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
+	Sort   uint   `gorm:"column:sort" json:"sort"`
 }
 
 func GetAllNavigator_Model(limit int, page int, name string, showHidden bool) (*[]ObjectHoaTieu, int64, error) {
@@ -41,7 +43,7 @@ func GetAllNavigator_Model(limit int, page int, name string, showHidden bool) (*
 		// Truy vấn dữ liệu không có điều kiện status
 		err = db.Table("hoatieus").
 			Where("deleted_at IS NULL").
-			Order("created_at").
+			Order("sort").
 			Limit(limit).
 			Where("name LIKE ?", "%"+name+"%").
 			Offset(offset).
@@ -56,7 +58,7 @@ func GetAllNavigator_Model(limit int, page int, name string, showHidden bool) (*
 		// Truy vấn dữ liệu dựa trên limit và điều kiện status = 1
 		err = db.Table("hoatieus").
 			Where("status = ? AND deleted_at IS NULL", 1).
-			Order("created_at").
+			Order("sort").
 			Limit(limit).
 			Offset(offset).
 			Find(&results).Error
@@ -77,6 +79,7 @@ func CreateNavigator_Model(data map[string]interface{}) error {
 		Image:  data["image"].(string),
 		Status: data["status"].(bool),
 		Rank:   data["rank"].(string),
+		Sort:   data["sort"].(uint),
 	}
 
 	// Insert into the database
@@ -94,6 +97,7 @@ func UpdateNavigator_Model(id string, data map[string]interface{}) error {
 		Image:  data["image"].(string),
 		Status: data["status"].(bool),
 		Rank:   data["rank"].(string),
+		Sort:   data["sort"].(uint),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
@@ -101,6 +105,7 @@ func UpdateNavigator_Model(id string, data map[string]interface{}) error {
 		"image":      item.Image,
 		"status":     item.Status,
 		"rank":       item.Rank,
+		"sort":       item.Sort,
 		"updated_at": time.Now(),
 	}).Error; err != nil {
 		return err
