@@ -12,6 +12,7 @@ type Hoatieu struct {
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
+	Sort   uint   `gorm:"column:sort" json:"sort"`
 }
 
 type ObjectHoaTieu struct {
@@ -20,6 +21,7 @@ type ObjectHoaTieu struct {
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
+	Sort   uint   `gorm:"column:sort" json:"sort"`
 }
 
 func (a *Hoatieu) GetAllNavigator_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectHoaTieu, int64, error) {
@@ -36,6 +38,7 @@ func (n *Hoatieu) CreateNavigator_Service() error {
 		"image":  n.Image,
 		"status": n.Status,
 		"rank":   n.Rank,
+		"sort":   n.Sort,
 	}
 	if err := models.CreateNavigator_Model(item); err != nil { // Change function name to match your model's function
 		return err
@@ -49,6 +52,7 @@ func (a *Hoatieu) UpdateNavigator_Service(id string) error {
 		"image":  a.Image,
 		"status": a.Status,
 		"rank":   a.Rank,
+		"sort":   a.Sort,
 	}
 	if err := models.UpdateNavigator_Model(id, item); err != nil {
 		return err

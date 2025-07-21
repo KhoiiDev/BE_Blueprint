@@ -12,6 +12,7 @@ type Hoatieu struct {
 	Rank   string `gorm:"column:rank" json:"rank"`
 	Image  string `gorm:"column:image" json:"image"`
 	Name   string `gorm:"column:name" json:"name"`
+	Sort   uint   `gorm:"column:sort" json:"sort"`
 }
 
 func GetAllNavigator_Component(c *fiber.Ctx) error {
@@ -59,6 +60,7 @@ func CreateNavigator_Component(c *fiber.Ctx) error {
 		Image:  form.Image,
 		Status: form.Status,
 		Rank:   form.Rank,
+		Sort:   form.Sort,
 	}
 	if err := HoaTieuService.CreateNavigator_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -71,6 +73,7 @@ func CreateNavigator_Component(c *fiber.Ctx) error {
 	data["Name"] = form.Name
 	data["Image"] = form.Image
 	data["Rank"] = form.Rank
+	data["Sort"] = strconv.FormatUint(uint64(form.Sort), 10)
 	data["Status"] = strconv.FormatBool(form.Status)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -92,6 +95,7 @@ func UpdateNavigator_Component(c *fiber.Ctx) error {
 		Image:  form.Image,
 		Status: form.Status,
 		Rank:   form.Rank,
+		Sort:   form.Sort,
 	}
 
 	err := HoaTieuService.UpdateNavigator_Service(c.Params("id"))
