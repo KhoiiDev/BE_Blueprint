@@ -17,6 +17,7 @@ type News struct {
 	Content    string `gorm:"column:content" json:"content"`
 	ContentEN  string `gorm:"column:content_en" json:"content_en"`
 	PostDate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
 func GetNews_Component(c *fiber.Ctx) error {
@@ -65,6 +66,7 @@ func CreateNews_Component(c *fiber.Ctx) error {
 		Content:    form.Content,
 		ContentEN:  form.ContentEN,
 		Postdate:   form.PostDate,
+		Pdfurl:     form.Pdfurl,
 	}
 	if err := NewsService.CreateNews_Service(); err != nil {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -82,6 +84,7 @@ func CreateNews_Component(c *fiber.Ctx) error {
 		"Content":    form.Content,
 		"ContentEN":  form.ContentEN,
 		"PostDate":   form.PostDate,
+		"Pdfurl":     form.Pdfurl,
 		"Status":     strconv.FormatBool(form.Status),
 	}
 
@@ -110,6 +113,7 @@ func UpdateNews_Component(c *fiber.Ctx) error {
 		Content:    form.Content,
 		ContentEN:  form.ContentEN,
 		Postdate:   form.PostDate,
+		Pdfurl:     form.Pdfurl,
 	}
 
 	err := NewsService.UpdateNews_Service(c.Params("id"))
