@@ -17,6 +17,7 @@ type News struct {
 	Content    string `gorm:"column:content" json:"content"`
 	ContentEN  string `gorm:"column:content_en" json:"content_en"`
 	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
 type ObjectNews struct {
@@ -30,6 +31,7 @@ type ObjectNews struct {
 	Content    string `gorm:"column:content" json:"content"`
 	ContentEN  string `gorm:"column:content_en" json:"content_en"`
 	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
 func GetNews_Model(limit int, page int, name string, showHidden bool) (*[]ObjectNews, int64, error) {
@@ -87,6 +89,7 @@ func CreateNews_Model(data map[string]interface{}) error {
 		Content:    data["content"].(string),
 		ContentEN:  data["content_en"].(string),
 		Postdate:   data["postdate"].(string),
+		Pdfurl:     data["pdfurl"].(string),
 	}
 
 	if err := db.Create(&item).Error; err != nil {
@@ -106,6 +109,7 @@ func UpdateNews_Model(id string, data map[string]interface{}) error {
 		Content:    data["content"].(string),
 		ContentEN:  data["content_en"].(string),
 		Postdate:   data["postdate"].(string),
+		Pdfurl:     data["pdfurl"].(string),
 	}
 
 	if err := db.Model(&item).Where("id = ?", id).Updates(map[string]interface{}{
@@ -118,6 +122,7 @@ func UpdateNews_Model(id string, data map[string]interface{}) error {
 		"content":     item.Content,
 		"content_en":  item.ContentEN,
 		"postdate":    item.Postdate,
+		"pdfurl":      item.Pdfurl,
 		"updated_at":  time.Now(),
 	}).Error; err != nil {
 		return err

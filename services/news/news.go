@@ -17,6 +17,7 @@ type News struct {
 	Content    string `gorm:"column:content" json:"content"`
 	ContentEN  string `gorm:"column:content_en" json:"content_en"`
 	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
 type ObjectNews struct {
@@ -30,6 +31,7 @@ type ObjectNews struct {
 	Content    string `gorm:"column:content" json:"content"`
 	ContentEN  string `gorm:"column:content_en" json:"content_en"`
 	Postdate   string `gorm:"column:postdate" json:"postdate"`
+	Pdfurl     string `gorm:"column:pdfurl" json:"pdfurl"`
 }
 
 func (a *News) GetNews_Service(limit int, page int, name string, showHidden bool) (*[]models.ObjectNews, int64, error) {
@@ -51,6 +53,7 @@ func (n *News) CreateNews_Service() error {
 		"content":     n.Content,
 		"content_en":  n.ContentEN,
 		"postdate":    n.Postdate,
+		"pdfurl":      n.Pdfurl,
 	}
 	if err := models.CreateNews_Model(item); err != nil {
 		return err
@@ -69,6 +72,7 @@ func (a *News) UpdateNews_Service(id string) error {
 		"content":     a.Content,
 		"content_en":  a.ContentEN,
 		"postdate":    a.Postdate,
+		"pdfurl":      a.Pdfurl,
 	}
 	if err := models.UpdateNews_Model(id, item); err != nil {
 		return err
